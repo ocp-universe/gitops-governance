@@ -1,0 +1,22 @@
+[
+    {
+      "name": "external-secrets-operator",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/external-secrets-operator",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "sonarqube",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/sonarqube",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    }
+  ]

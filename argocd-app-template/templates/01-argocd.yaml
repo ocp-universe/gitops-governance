@@ -1,0 +1,45 @@
+
+# ArgoCD
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: {{ .Values.config.names.base | quote }}
+  namespace: {{ .Values.config.argocdNamespace | quote }} 
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  rbac:
+    # default readonly allows that everyone (also via OCP oauth) can see all resources
+    defaultPolicy: 'role:readonly'
+    policy: |
+      g, system:cluster-admins, role:admin
+    scopes: '[groups]'
+  {{- if .Values.config.dex.enabled }}  
+  dex:
+    openShiftOAuth: true
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+  {{- end }}
+  {{- if .Values.config.appset.enabled }}
+  # Enable ApplicationSet support
+  applicationSet: {}
+  {{- end }}
+  server:
+    insecure: true
+    route:
+      enabled: true
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+  ha:
+    enabled: false
+  tls:
+    ca: {}
+  # Enable the possibility to reference helm charts in kustomize (helmCharts)
+  # feature available since kustomize 4.1.0  
+  kustomizeBuildOptions: '--enable-helm'
