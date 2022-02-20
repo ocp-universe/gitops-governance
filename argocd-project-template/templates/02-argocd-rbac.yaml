@@ -1,0 +1,149 @@
+# RBAC
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "{{ .Values.config.names.base }}-role"
+  annotations:
+    argocd.argoproj.io/sync-wave: "-51"
+rules:
+# General read/patch
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - Get
+  - List
+  - Watch
+  - Patch
+# Apps
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  - deployments
+  verbs: ['*']
+# setting rolebinding
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - rolebindings
+  verbs: ['*']
+# ServiceMonitor
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs: ['*']
+# ######
+# Bootstrap / Tekton related
+# OpenShift resources
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  verbs: ['*']
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  verbs: ['*']
+# ArgoCD
+- apiGroups:
+  - argoproj.io
+  resources:
+  - argocds
+  - appprojects
+  - applications
+  - applicationsets
+  verbs: ['*']
+# Tekton
+- apiGroups:
+  - triggers.tekton.dev
+  resources:
+  - eventlisteners
+  - triggerbindings
+  - triggertemplates
+  verbs: ['*']
+- apiGroups:
+  - tekton.dev
+  resources:
+  - tasks
+  - pipelines
+  - pipelineruns
+  verbs: ['*']
+- apiGroups:
+  - "*"
+  resources:
+  - serviceaccounts
+  - services
+  - secrets
+  verbs: ["*"]
+# ExternalSecrets
+- apiGroups:
+  - external-secrets.io
+  resources:
+  - externalsecrets
+  verbs: ["*"]
+
+# #######
+# Assign for the app specific ArgoCD sa the role in the app specific namespaces
+{{- range .Values.config.projects }}
+{{ $managedNamespace := .managedNamespace }}
+{{- range .namespaces }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: "argocd-{{ .namespace }}-rb"
+  namespace: {{ .namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io  
+  kind: ClusterRole
+  name: "{{ $.Values.config.names.base }}-role"
+subjects:
+- kind: ServiceAccount
+  name: "{{ $.Values.config.names.base }}-argocd-application-controller"
+  namespace: {{ $managedNamespace }} 
+{{- end }}
+{{- end }}
+
+# #######
+# Assign for the bootstrap ArgoCD sa the role to manage the bootstrap and common resources
+{{- range .Values.config.bootstrap.serviceaccounts }}
+---
+# Set rolebinding for the bootstrap/common sa in the managing namespace of project
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: "{{ . }}-rb"
+  namespace: "{{ $.Values.config.argocdNamespace }}"
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io  
+  kind: ClusterRole
+  name: "{{ $.Values.config.names.base }}-role"
+subjects:
+- kind: ServiceAccount
+  name: "{{ . }}"
+  namespace: "{{ $.Values.config.bootstrap.argocdNamespace }}" 
+---
+# Set rolebinding for the bootstrap/common sa in the managing namespace of project
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: "{{ . }}-rb"
+  #namespace: "{{ $.Values.config.argocdNamespace }}"
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io  
+  kind: ClusterRole
+  name: "{{ $.Values.config.names.base }}-role"
+subjects:
+- kind: ServiceAccount
+  name: "{{ . }}"
+  namespace: "{{ $.Values.config.bootstrap.argocdNamespace }}" 
+{{- end }}

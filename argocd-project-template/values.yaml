@@ -1,0 +1,36 @@
+# ArgoCD Configuration
+
+config:
+  names:
+    base: 'gov-demo'
+  bootstrap:
+    argocdNamespace: openshift-gitops
+    valueFile: values.yaml
+    serviceaccounts: 
+    - argocd-argocd-application-controller
+    - openshift-gitops-argocd-application-controller
+  argocdNamespace: demo-quarkus-cicd
+  # ApplicationSet: consider to enable it in ArgoCD "applicationset: {}"
+  appset:
+    enabled: false
+  tekton:
+    enabled: true
+  dex:
+    enabled: true
+  projects: 
+    - name: demo-quarkus-app
+      managedNamespace: demo-quarkus-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: main
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: argocd/config.json
+      namespaces:
+      - namespace: demo-quarkus-cicd
+        create: true
+      - namespace: demo-quarkus-test
+        create: true
+      - namespace: demo-quarkus-dev
+        create: true
+      - namespace: demo-quarkus-prod
+        create: true
