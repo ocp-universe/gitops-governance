@@ -1,4 +1,5 @@
 {{- range .Values.config.projects }}
+{{ $mangedNamespace := .managedNamespace }}
 {{- range .namespaces }}
 {{- if .create }}
 ---
@@ -9,7 +10,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "-50"
   labels:
     kubernetes.io/metadata.name: {{ .namespace }}
-    argocd.argoproj.io/managed-by: {{ $.Values.config.bootstrap.argocdNamespace }}
+    #argocd.argoproj.io/managed-by: {{ $.Values.config.bootstrap.argocdNamespace }}
+    argocd.argoproj.io/managed-by: {{ $mangedNamespace }}
   name: {{ .namespace }}
 {{- end }}
 {{- end }}
