@@ -14,24 +14,16 @@ config:
     enabled: false
   projects: 
     # Base configuration for all app teams and projects
-    - name: gov-projects
-      managedNamespace: demo-quarkus-cicd
-      repo: https://github.com/ocp-universe/gitops-governance.git
-      branch: main
-      path: 'argocd-app-template'
-      helmValueFile: values.yaml
-      argocdNamespace: openshift-gitops
-      argocdProject: default
-      #configJson: argocd/config.json
-      namespaces:
-      - namespace: demo-quarkus-cicd
-        create: false
-      - namespace: demo-quarkus-test
-        create: false
-      - namespace: demo-quarkus-dev
-        create: false
-      - namespace: demo-quarkus-prod
-        create: false
+    #- name: gov-projects
+    #  managedNamespace: demo-quarkus-cicd
+    #  repo: https://github.com/ocp-universe/gitops-governance.git
+    #  branch: main
+    #  path: 'argocd-app-template'
+    #  helmValueFile: values.yaml
+    #  argocdNamespace: openshift-gitops
+    #  argocdProject: default
+    #  #configJson: argocd/config.json
+    #  namespaces: []
     # Common cluster configuration and capabilities for all teams/projects
     - name: gov-cluster-config
       managedNamespace: demo-quarkus-cicd

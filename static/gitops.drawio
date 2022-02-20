@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="TUL-UYeq6HDb0CNwIHWx" name="GitOps">
-        <mxGraphModel dx="1552" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="1995" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="nsVgLiraT71_AxL_cq3k-0"/>
                 <mxCell id="nsVgLiraT71_AxL_cq3k-1" parent="nsVgLiraT71_AxL_cq3k-0"/>
@@ -330,81 +330,68 @@
                 <mxCell id="tsx76kW40hrkIDjsJAma-0" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#d79b00;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
                     <mxGeometry x="970" y="40" width="360" height="460" as="geometry"/>
                 </mxCell>
-                <mxCell id="tsx76kW40hrkIDjsJAma-3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-1" target="tsx76kW40hrkIDjsJAma-2" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="290" y="585"/>
-                            <mxPoint x="290" y="535"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="tsx76kW40hrkIDjsJAma-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-1" target="tsx76kW40hrkIDjsJAma-4" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="290" y="585"/>
-                            <mxPoint x="290" y="640"/>
-                        </Array>
-                    </mxGeometry>
+                <mxCell id="tsx76kW40hrkIDjsJAma-3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-1" target="tsx76kW40hrkIDjsJAma-2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-1" value="«config»&lt;br&gt;&lt;b&gt;gov&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="110" y="560" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="110" y="570" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-2" value="«config»&lt;br&gt;&lt;b&gt;cluster-config&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="344" y="510" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="344" y="570" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-4" value="«config»&lt;br&gt;&lt;b&gt;app-template&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="344" y="615" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="554" y="662.5" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-13" value="use" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-6" target="tsx76kW40hrkIDjsJAma-12" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-6" value="«config»&lt;br&gt;&lt;b&gt;cluster-capability&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="554" y="510" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="554" y="570" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-7" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-2" target="tsx76kW40hrkIDjsJAma-6" edge="1">
                     <mxGeometry x="-1" y="3" relative="1" as="geometry">
-                        <mxPoint x="210" y="360" as="sourcePoint"/>
-                        <mxPoint x="370" y="360" as="targetPoint"/>
+                        <mxPoint x="210" y="420" as="sourcePoint"/>
+                        <mxPoint x="370" y="420" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-15" value="use" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-8" target="tsx76kW40hrkIDjsJAma-14" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-8" value="«config»&lt;br&gt;&lt;b&gt;app-deploy-manifest&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="554" y="610" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="770" y="662.5" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-9" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-4" target="tsx76kW40hrkIDjsJAma-8" edge="1">
                     <mxGeometry x="-1" y="3" relative="1" as="geometry">
-                        <mxPoint x="450" y="625" as="sourcePoint"/>
-                        <mxPoint x="564" y="550" as="targetPoint"/>
+                        <mxPoint x="666" y="677.5" as="sourcePoint"/>
+                        <mxPoint x="780" y="602.5" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-17" value="use" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-10" target="tsx76kW40hrkIDjsJAma-16" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-10" value="«config»&lt;br&gt;&lt;b&gt;tekton-manifest&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="554" y="675" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="770" y="727.5" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-11" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-4" target="tsx76kW40hrkIDjsJAma-10" edge="1">
                     <mxGeometry x="-1" y="3" relative="1" as="geometry">
-                        <mxPoint x="464" y="650" as="sourcePoint"/>
-                        <mxPoint x="564" y="645" as="targetPoint"/>
+                        <mxPoint x="680" y="702.5" as="sourcePoint"/>
+                        <mxPoint x="780" y="697.5" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-12" value="«repo»&lt;br&gt;&lt;b&gt;cluster-capability&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="764" y="510" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="764" y="570" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-14" value="«repo»&lt;br&gt;&lt;b&gt;project-app-config&lt;/b&gt;" style="html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="764" y="610" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="980" y="662.5" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-16" value="«repo»&lt;br&gt;&lt;b&gt;tekton-config&lt;/b&gt;" style="html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="764" y="675" width="110" height="50" as="geometry"/>
+                    <mxGeometry x="980" y="727.5" width="110" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-18" value="App-Developer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="30" y="630" width="30" height="60" as="geometry"/>
+                    <mxGeometry x="30" y="690" width="30" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsx76kW40hrkIDjsJAma-19" value="DevOps Engineer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
-                    <mxGeometry x="30" y="490" width="30" height="60" as="geometry"/>
+                    <mxGeometry x="30" y="550" width="30" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="6ou4WCCmQBVYviTk-9dl-62" value="«k8s»&lt;br&gt;&lt;b&gt;tekon-resources&lt;/b&gt;" style="html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
                     <mxGeometry x="454" y="1290" width="90" height="30" as="geometry"/>
@@ -451,6 +438,12 @@
                 </mxCell>
                 <mxCell id="xsDC2VhEvb90YRFbdPqD-0" value="«git-repo»&lt;br&gt;&lt;b&gt;app-source-code&lt;/b&gt;" style="html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="nsVgLiraT71_AxL_cq3k-1" vertex="1">
                     <mxGeometry x="444" y="1640" width="110" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="0" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="nsVgLiraT71_AxL_cq3k-1" source="tsx76kW40hrkIDjsJAma-2" target="tsx76kW40hrkIDjsJAma-4">
+                    <mxGeometry x="-1" y="3" relative="1" as="geometry">
+                        <mxPoint x="464" y="605" as="sourcePoint"/>
+                        <mxPoint x="564" y="605" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
