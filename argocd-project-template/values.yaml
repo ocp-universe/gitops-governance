@@ -12,7 +12,7 @@ config:
   argocdNamespace: demo-quarkus-cicd
   # ApplicationSet: consider to enable it in ArgoCD "applicationset: {}"
   appset:
-    enabled: false
+    enabled: true
   tekton:
     enabled: true
   dex:

@@ -1,6 +1,7 @@
 # ArgoCD Application: Serves as bootstrap for the custom App
-{{- if .Values.config.appset.enabled }}
+{{- if not .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
+{{- if .configJson }}
 {{ $mangedNamespace := .managedNamespace }}
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -14,7 +15,7 @@ spec:
       repoURL: {{ .repo }}
       revision: '{{ .branch }}'
       files:
-      - path: '{{ .configJson }}'
+      - path: '{{ .path }}/{{ .configJson }}'
   template:
     metadata:
       name: '{{`{{name}}`}}'
@@ -23,11 +24,11 @@ spec:
       source:
         repoURL: '{{`{{repo}}`}}'
         targetRevision: '{{`{{revision}}`}}'
-        path: '{{`{{path}}`}}'
-        helm:
-        valueFiles:
-        - '{{`{{valueFile}}`}}'
-        releaseName: '{{`{{releaseName}}`}}'
+        path: '{{`{{srcPath}}`}}'
+        #helm:
+        #valueFiles:
+        #- '{{`{{valueFile}}`}}'
+        #releaseName: '{{`{{releaseName}}`}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'
@@ -35,5 +36,6 @@ spec:
         automated:
           prune: true
           selfHeal: true
+{{- end }}
 {{- end }}
 {{- end }}
