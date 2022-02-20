@@ -13,6 +13,14 @@ toc::[]
 
 This projects represents the main IT architecture/governance configuration for managing a cluster for various teams with different Kubernetes/OpenShift capabilities. Using the GitOps approach.
 
+== Usage
+
+.Initialize
+----
+$ helm template gov governance --output-dir=work/gov
+
+$ oc apply -f work/gov/argocd/templates
+----
 
 == Summary
 
