@@ -16,9 +16,9 @@ config:
     # Base configuration for all app teams and projects
     - name: gov-projects
       managedNamespace: demo-quarkus-cicd
-      repo: https://github.com/haf-tech/quarkus-playground.git
+      repo: https://github.com/ocp-universe/gitops-governance.git
       branch: main
-      path: '.argocd/argocd-app-template'
+      path: 'argocd-app-template'
       helmValueFile: values.yaml
       argocdNamespace: openshift-gitops
       argocdProject: default
@@ -35,9 +35,9 @@ config:
     # Common cluster configuration and capabilities for all teams/projects
     - name: gov-cluster-config
       managedNamespace: demo-quarkus-cicd
-      repo: https://github.com/haf-tech/quarkus-playground.git
+      repo: https://github.com/ocp-universe/gitops-governance.git
       branch: main
-      path: '.argocd/governance'
+      path: 'governance'
       #helmValueFile: values.yaml
       argocdNamespace: openshift-gitops
       argocdProject: default
