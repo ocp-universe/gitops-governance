@@ -11,7 +11,7 @@ metadata:
   #namespace: {{ $mangedNamespace | quote }} 
   namespace: "openshift-gitops" 
 spec:
-  project: "{{ .name }}-prj"
+  #project: "{{ .name }}-prj"
   project: "default"
   source:
     repoURL: https://github.com/haf-tech/quarkus-playground.git
