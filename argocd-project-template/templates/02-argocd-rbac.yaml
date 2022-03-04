@@ -83,8 +83,10 @@ rules:
 # ExternalSecrets
 - apiGroups:
   - external-secrets.io
+  - operator.external-secrets.io
   resources:
   - externalsecrets
+  - operatorconfigs
   verbs: ["*"]
 
 # #######
