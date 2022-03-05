@@ -76,7 +76,7 @@ spec:
           return hs
   resourceExclusions: |
     - apiGroups:
-      - "*"
+      - "tekton.dev"
       kinds:
       - "PipelineRun"
       - "TaskRun"
