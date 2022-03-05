@@ -1,0 +1,22 @@
+[
+    {
+      "name": "gov-projects-apps",
+      "repo": "https://github.com/ocp-universe/gitops-governance.git",
+      "srcPath": "argocd-project-template",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "ocp-pipelines",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/ocp-pipelines",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    }
+  ]
