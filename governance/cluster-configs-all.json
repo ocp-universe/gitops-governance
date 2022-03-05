@@ -1,0 +1,52 @@
+[
+    {
+      "name": "gov-projects-apps",
+      "repo": "https://github.com/ocp-universe/gitops-governance.git",
+      "srcPath": "argocd-project-template",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "external-secrets-operator",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/external-secrets-operator",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "ocp-pipelines",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/ocp-pipelines",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "sonarqube",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/sonarqube",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    },
+    {
+      "name": "argocd-demo",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/argocd-demo/overlays/env1",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
+    }
+  ]
