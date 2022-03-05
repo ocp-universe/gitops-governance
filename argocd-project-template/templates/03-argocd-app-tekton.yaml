@@ -25,10 +25,10 @@ spec:
     kind: Application
     jsonPointers:
     - /status
-  - group: triggers.tekton.dev
-    kind: EventListener
-    jsonPointers:
-    - /status
+#  - group: triggers.tekton.dev
+#    kind: EventListener
+#    jsonPointers:
+#    - /status
   - group: triggers.tekton.dev
     kind: TriggerTemplate
     jsonPointers:
