@@ -23,6 +23,8 @@ spec:
     - namespace: '{{ .namespace }}'
       server: '*'    
     {{- end }}
+  # Limit the git repos which are allowed to use this project  
   sourceRepos:
-    - '*'
+  #  - '*'
+    - '{{ .repo }}'
 {{- end }}
