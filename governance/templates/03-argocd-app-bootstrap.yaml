@@ -1,5 +1,4 @@
 # ArgoCD Application: Manages all governend apps/teams
-{{- if not .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
 {{- if .configJson }}
 ---
@@ -35,6 +34,9 @@ spec:
         automated:
           prune: true
           selfHeal: true
-{{- end }}
+        syncOptions:
+        # Turning on selective sync option which will sync only out-of-sync resources
+        # reduce the pressure on the API server, helpful in case of many resources
+        - ApplyOutOfSyncOnly=true
 {{- end }}
 {{- end }}
