@@ -1,5 +1,5 @@
 # ArgoCD Application: Serves as bootstrap for the custom App
-{{- if not .Values.config.appset.enabled }}
+{{- if .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
 {{- if .configJson }}
 {{ $mangedNamespace := .managedNamespace }}
