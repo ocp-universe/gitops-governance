@@ -74,6 +74,7 @@ spec:
           hs.status = "Healthy"
           hs.message = "Controller doesn't report resource status"
           return hs
+  # Ignore the following Kinds, mostly they are generated but not from ArgoCD
   resourceExclusions: |
     - apiGroups:
       - "tekton.dev"

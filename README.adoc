@@ -48,7 +48,7 @@ GitOps and IT-Governance to manage a Kubernetes/OpenShift cluster for various te
 
 == References
 
-* tbd
+* Managing GitOps control planes for secure GitOps practices - link:https://developers.redhat.com/articles/2021/08/03/managing-gitops-control-planes-secure-gitops-practices[]
 
 == Open
 
