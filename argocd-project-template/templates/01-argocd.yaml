@@ -45,4 +45,33 @@ spec:
   # Enable the possibility to reference helm charts in kustomize (helmCharts)
   # feature available since kustomize 4.1.0  
   kustomizeBuildOptions: '--enable-helm'
-  {{- end }}
+  # Custom Health check for resources which has no status fields or
+  # not in this case as ArgoCD it expects
+  resourceCustomizations: |
+    operator.external-secrets.io/OperatorConfig:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          return hs
+    extensions/Ingress:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          return hs
+    networking.k8s.io/Ingress:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          return hs
+    PersistentVolumeClaim:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          return hs
+    bitnami.com/SealedSecret:
+        health.lua: |
+          hs = {}
+          hs.status = "Healthy"
+          hs.message = "Controller doesn't report resource status"
+          return hs
+{{- end }}
