@@ -10,8 +10,9 @@
 # - Optimize Namespace configuration for DevOps Team (gov + app-tpl)
 
 config:
-  appset:
-    enabled: false
+  gitops:
+    # install OpenShift GitOps or not
+    install: true
   projects: 
     # Base configuration for all app teams and projects
     #- name: gov-projects
