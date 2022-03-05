@@ -28,5 +28,15 @@
       "project": "default",
       "valueFile": "",
       "releaseName": ""
+    },
+    {
+      "name": "argocd-demo",
+      "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+      "srcPath": "03-cluster-capabilities/argocd-demo",
+      "revision": "main",
+      "namespace": "openshift-gitops",
+      "project": "default",
+      "valueFile": "",
+      "releaseName": ""
     }
   ]
