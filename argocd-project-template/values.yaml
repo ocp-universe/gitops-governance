@@ -24,7 +24,7 @@ config:
       branch: main
       path: 'argocd'
       helmValueFile: values.yaml
-      configJson: argocd/config.json
+      configJson: config.json
       namespaces:
       - namespace: demo-quarkus-cicd
         create: true
