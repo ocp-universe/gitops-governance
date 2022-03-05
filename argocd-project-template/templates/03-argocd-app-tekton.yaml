@@ -11,7 +11,6 @@ metadata:
   #namespace: {{ $mangedNamespace | quote }} 
   namespace: "openshift-gitops" 
 spec:
-  #project: "{{ .name }}-prj"
   project: "default"
   source:
     repoURL: https://github.com/haf-tech/quarkus-playground.git
@@ -20,6 +19,32 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: '{{ $mangedNamespace }}'
+  # Various rules to ignore fields
+  ignoreDifferences:
+  - group: argoproj.io
+    kind: Application
+    jsonPointers:
+    - /status
+  - group: triggers.tekton.dev
+    kind: EventListener
+    jsonPointers:
+    - /status
+  - group: triggers.tekton.dev
+    kind: TriggerTemplate
+    jsonPointers:
+    - /status
+  - group: triggers.tekton.dev
+    kind: TriggerBinding
+    jsonPointers:
+    - /status
+  - group: route.openshift.io
+    kind: Route
+    jsonPointers:
+    - /spec/host
+  - group: bitnami.com
+    kind: SealedSecret
+    jsonPointers:
+    - /status
   syncPolicy:
     automated:
       prune: true
