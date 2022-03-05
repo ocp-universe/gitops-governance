@@ -12,6 +12,12 @@ spec:
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
+  # Ignore the following Kinds, mostly they are generated but not from ArgoCD
+  namespaceResourceBlacklist:
+  - group: tekton.dev
+    kind: TaskRun
+  - group: tekton.dev
+    kind: PipelineRun
   destinations:
     {{- range .namespaces }}
     - namespace: '{{ .namespace }}'
