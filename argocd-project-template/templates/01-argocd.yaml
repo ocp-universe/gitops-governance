@@ -74,4 +74,12 @@ spec:
           hs.status = "Healthy"
           hs.message = "Controller doesn't report resource status"
           return hs
+  resourceExclusions: |
+    - apiGroups:
+      - "*"
+      kinds:
+      - "PipelineRun"
+      - "TaskRun"
+      clusters:
+      - "*"
 {{- end }}
