@@ -32,6 +32,20 @@ This construct contains the following components
 The initial bootstrap will be started with applying the Kubernetes manifest files from link:governance[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the wanted applications.
 This approach allows a very simple extension of the capabilities (aka ArgoCD applications).
 
+== GitOps Features
+
+This chapters list all the available features in this setup
+
+* uses ArgoCD for the cluster configuration reconciliation 
+* manages all capabilities in a JSON file which is the base for `ApplicationSet`
+* creates for any team/project an own `ArgoCD` and `Project` instance
+* bound git repo of the team to the ArgoCD Project instance for more/better multi-tenant restriction
+* creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
+* configures ArgoCD to exclude `PipelineRun` and `TaskRun`, this allows to manually execute/run such runs (for testing)
+* Optimize ArgoCD and enable only selective synchronization (out-of-sync) instead always all resources
+* enable Prometheus monitoring for the ArgoCD resources
+
+
 == Usage
 
 .Initialize
@@ -48,6 +62,7 @@ GitOps and IT-Governance to manage a Kubernetes/OpenShift cluster for various te
 
 == References
 
+* ArgoCD - link:https://argo-cd.readthedocs.io/en/stable/[]
 * Managing GitOps control planes for secure GitOps practices - link:https://developers.redhat.com/articles/2021/08/03/managing-gitops-control-planes-secure-gitops-practices[]
 
 == Open

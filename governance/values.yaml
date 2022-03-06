@@ -34,5 +34,6 @@ config:
       #helmValueFile: values.yaml
       argocdNamespace: openshift-gitops
       argocdProject: default
+      #configJson: cluster-configs-base.json
       configJson: cluster-configs.json
       namespaces: []
