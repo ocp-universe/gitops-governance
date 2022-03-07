@@ -16,7 +16,7 @@ spec:
     description: "Read-only privileges to Project {{ .name }}-prj"
     policies:
     - "p, proj:{{ .name }}-prj:read-only, applications, get, {{ .name }}-prj/*, allow"
-    - "p, proj:{{ .name }}-prj:read-only, applications, sync, {{ .name }}-prj/*, allow"
+    #- "p, proj:{{ .name }}-prj:read-only, applications, sync, {{ .name }}-prj/*, allow"
     groups:
     - "{{ .name }}-group"
   clusterResourceWhitelist:
