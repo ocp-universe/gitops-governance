@@ -11,8 +11,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "-10"
 spec:
   rbac:
-    # default readonly allows that everyone (also via OCP oauth) can see all resources
-    defaultPolicy: 'role:readonly'
+    # default is no role, results that no body can see any resource
+    # in ArgoCD Projects are roles defined to get access to the resources
+    defaultPolicy: ''
     policy: |
       g, system:cluster-admins, role:admin
     scopes: '[groups]'

@@ -9,6 +9,15 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-9"
 spec:
+  # Project specific roles, by default is no role defined (in ArgoCD instance)
+  # https://argo-cd.readthedocs.io/en/stable/user-guide/projects/#configuring-rbac-with-projects
+  roles: 
+  - name: read-only
+    description: "Read-only privileges to Project {{ .name }}-prj"
+    policies:
+    - "p, proj:{{ .name }}-prj:read-only, applications, get, {{ .name }}-prj/*, allow"
+    groups:
+    - "{{ .name }}-group"
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
