@@ -90,7 +90,7 @@ rules:
   verbs: ["*"]
 
 # #######
-# Assign for the app specific ArgoCD sa the role in the app specific namespaces
+# Assign rolebindings so that ArgoCD can apply the manifests
 {{- range .Values.config.projects }}
 {{ $managedNamespace := .managedNamespace }}
 {{ $projectName := .name }}
