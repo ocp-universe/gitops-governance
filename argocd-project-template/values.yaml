@@ -17,6 +17,9 @@ config:
     enabled: true
   dex:
     enabled: true
+  openShift:
+    # Create groups in OpenShift, which could be used for ArgoCD RBAC
+    group2argo: false
   projects: 
     - name: demo-quarkus-app
       managedNamespace: demo-quarkus-cicd
