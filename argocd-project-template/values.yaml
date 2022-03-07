@@ -9,6 +9,7 @@ config:
     serviceaccounts: 
     - argocd-argocd-application-controller
     - openshift-gitops-argocd-application-controller
+    - demo-quarkus-app-argocd-application-controller
   argocdNamespace: demo-quarkus-cicd
   # ApplicationSet: consider to enable it in ArgoCD "applicationset: {}"
   appset:
