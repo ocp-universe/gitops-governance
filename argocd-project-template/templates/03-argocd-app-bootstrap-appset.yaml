@@ -29,9 +29,9 @@ spec:
         targetRevision: '{{`{{revision}}`}}'
         path: '{{`{{srcPath}}`}}'
         helm:
-        valueFiles:
-        - '{{`{{valueFile}}`}}'
-        releaseName: '{{`{{releaseName}}`}}'
+          valueFiles:
+          - '{{`{{valueFile}}`}}'
+          releaseName: '{{`{{releaseName}}`}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'
