@@ -1,4 +1,7 @@
 # ArgoCD Application: Serves as bootstrap for the custom App
+# Expectation
+# - custom app uses helm
+# - env specific value files
 {{- if .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
 {{- if .configJson }}
@@ -25,10 +28,10 @@ spec:
         repoURL: '{{`{{repo}}`}}'
         targetRevision: '{{`{{revision}}`}}'
         path: '{{`{{srcPath}}`}}'
-        #helm:
-        #valueFiles:
-        #- '{{`{{valueFile}}`}}'
-        #releaseName: '{{`{{releaseName}}`}}'
+        helm:
+        valueFiles:
+        - '{{`{{valueFile}}`}}'
+        releaseName: '{{`{{releaseName}}`}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{`{{namespace}}`}}'

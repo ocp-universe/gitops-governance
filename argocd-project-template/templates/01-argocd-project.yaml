@@ -9,7 +9,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-9"
 spec:
-  # Project specific roles, by default is no role defined (in ArgoCD instance)
+  # Project specific roles, by default is no role defined (see the ArgoCD instance)
   # https://argo-cd.readthedocs.io/en/stable/user-guide/projects/#configuring-rbac-with-projects
   roles: 
   - name: read-only
