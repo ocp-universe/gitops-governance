@@ -2,6 +2,7 @@
 {{- if .Values.config.tekton.enabled }}
 {{- range .Values.config.projects }}
 {{ $mangedNamespace := .managedNamespace }}
+{{- if .enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -53,5 +54,6 @@ spec:
     # Turning on selective sync option which will sync only out-of-sync resources
     # reduce the pressure on the API server, helpful in case of many resources
     - ApplyOutOfSyncOnly=true
+{{- end }}
 {{- end }}
 {{- end }}
