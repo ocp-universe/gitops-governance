@@ -61,7 +61,7 @@ config:
         branch: main
         path: 'tekton/cicd/overlays'
     - name: demo-team3
-      enabled: true
+      enabled: false
       managedNamespace: demo-team3-cicd
       repo: https://github.com/haf-tech/quarkus-playground-config.git
       branch: test-promotion
