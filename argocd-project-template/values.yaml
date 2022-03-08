@@ -60,3 +60,20 @@ config:
         repo: https://github.com/ocp-universe/gitops-governance.git
         branch: main
         path: 'tekton/cicd/overlays'
+    - name: demo-team3
+      enabled: true
+      managedNamespace: demo-team3-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: test-promotion
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: config3.json
+      namespaces:
+      - namespace: demo-team3-cicd
+        create: true
+      - namespace: demo-team3-test
+        create: true
+      tekton:
+        repo: https://github.com/ocp-universe/gitops-governance.git
+        branch: main
+        path: 'tekton/cicd/overlays'
