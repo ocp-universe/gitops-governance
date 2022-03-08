@@ -1,0 +1,19 @@
+# DEPRECATED
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  creationTimestamp: null
+  name: binding-app-custom
+  annotations:
+    argocd.argoproj.io/sync-wave: "-40"
+spec:
+  params:
+  - name: imageRepo
+    value: image-registry.openshift-image-registry.svc:5000/$(extensions.ns)/quarkus-playground
+  - name: imageTag
+    value: $(extensions.imgTag)
+  - name: tlsVerify
+    value: "false"
+  - name: dockerFile
+    value: "./src/main/docker/Dockerfile.jvm"
+status: {}

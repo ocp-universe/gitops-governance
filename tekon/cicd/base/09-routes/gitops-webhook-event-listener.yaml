@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: gitops-webhook-event-listener-route
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  port:
+    targetPort: 8000
+  to:
+    kind: Service
+    name: el-cicd-event-listener-quarkus-playground
+    weight: 100
+  wildcardPolicy: None
