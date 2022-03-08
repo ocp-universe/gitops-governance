@@ -40,7 +40,7 @@ config:
       - namespace: demo-quarkus-prod
         create: true
       tekton:
-        repo: https://github.com/haf-tech/quarkus-playground.git
+        repo: https://github.com/ocp-universe/gitops-governance.git
         branch: main
         path: 'tekton/cicd/overlays'
     - name: demo-team2
