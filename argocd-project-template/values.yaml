@@ -38,3 +38,15 @@ config:
         create: true
       - namespace: demo-quarkus-prod
         create: true
+    - name: demo-team2
+      managedNamespace: demo-team2-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: main
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: config.json
+      namespaces:
+      - namespace: demo-team2-cicd
+        create: true
+      - namespace: demo-team2-test
+        create: true
