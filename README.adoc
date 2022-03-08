@@ -13,21 +13,22 @@ toc::[]
 
 This projects represents the main IT architecture/governance configuration for managing a cluster for various teams with different Kubernetes/OpenShift capabilities. Using the GitOps approach.
 
-It use primarily link:https://docs.openshift.com/container-platform/4.8/cicd/gitops/understanding-openshift-gitops.html[OpenShift GitOps] which includes link:https://argo-cd.readthedocs.io/en/stable/[ArgoCD].
+It uses primarily link:https://docs.openshift.com/container-platform/4.8/cicd/gitops/understanding-openshift-gitops.html[OpenShift GitOps] which includes link:https://argo-cd.readthedocs.io/en/stable/[ArgoCD].
 
 The main objective is, to have one place for managing the Kubernetes/OpenShift cluster the GitOps way. This includes the following use cases
 
-* bootstrap the existing cluster with main/base capabilities like Pipeline support, Secrets Management or similar
-* manage the teams and apps which includes the namespaces and corresponding pipeline configurations
+* *bootstrap* the existing cluster with main/base *capabilities* like Pipeline support, Secrets Management or similar
+* *manage* the teams and apps which includes the namespaces and corresponding pipeline configurations
 * all other IT architecture and governance related policies
 
-All use cases (features/capabilities) will be handled with OpenShift GitOps/ArgoCD. This allows for flexible modification and expansion of the capabilities.
+All use cases (features/capabilities) will be handled with OpenShift GitOps/ArgoCD. This allows flexible modification and expansion of the capabilities.
 
 This construct contains the following components
 
 * link:governance[]: the bootstrap configuration 
 * link:governance/cluster-configs.json[]: the cluster configuration 
 * link:argocd-project-template[]: the ArgoCD configuration which will be applied for the teams/apps
+* link:tekton[]: Base Tekton task and pipeline definitions
 
 The initial bootstrap will be started with applying the Kubernetes manifest files from link:governance[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the wanted applications and cluster capabilities (like Operators, SonarQube or similar).
 
@@ -84,6 +85,14 @@ $ helm template gov governance --output-dir=work/gov
 
 $ oc apply -f work/gov/argocd/templates
 ----
+
+Rest only via modification of the manifest files in the directory. E.g.
+
+* adding new teams/project => link:argocd-project-template/values.yaml[]
+* add a new capability to the cluster (e.g. HashiCorp Vault instance) => link:governance/cluster-configs.json[]
+* Enhance/Fix Tekton pipeline definitions => link:tekton[]
+* Set NetworkPolicies for all projects, but transparent from the dev teams => link:argocd-project-template[]
+
 
 == Summary
 
