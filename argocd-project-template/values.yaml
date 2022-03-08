@@ -50,7 +50,7 @@ config:
       branch: main
       path: 'argocd'
       helmValueFile: values.yaml
-      configJson: config.json
+      configJson: config2.json
       namespaces:
       - namespace: demo-team2-cicd
         create: true
