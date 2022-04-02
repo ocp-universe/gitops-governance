@@ -20,7 +20,7 @@ config:
     enabled: true
   openShift:
     # Create groups in OpenShift, which could be used for ArgoCD RBAC
-    group2argo: false
+    group2argo: true
   projects: 
     - name: demo-quarkus-app
       enabled: true
