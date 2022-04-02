@@ -25,12 +25,12 @@ All use cases (features/capabilities) will be handled with OpenShift GitOps/Argo
 
 This solution contains the following components
 
-* link:governance[]: the bootstrap configuration 
+* link:gitops-bootstrap[]: the bootstrap definition to install ArgoCD and configure the foundation 
 * link:governance/cluster-configs.json[]: the cluster configuration 
 * link:argocd-project-template[]: the standardized project template as ArgoCD configuration which will be applied for the teams/apps
 * link:tekton[]: Base Tekton task and pipeline definitions
 
-The initial bootstrap will be started with applying the Kubernetes manifest files from link:governance[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the cluster capabilities (like Operators, SonarQube or similar) and to maintained applications.
+The initial bootstrap will be started with applying the Kubernetes manifest files from link:gitops-bootstrap[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the cluster capabilities (like Operators, SonarQube or similar) and to maintained applications.
 
 This approach allows a very simple extension of the capabilities (aka ArgoCD applications).
 
@@ -81,7 +81,7 @@ This chapters list all the available features in this setup
 
 .Initialize
 ----
-$ helm template gov governance --output-dir=work/gov
+$ helm template gov gitops-bootstrap --output-dir=work/gov
 
 $ oc apply -f work/gov/argocd/templates
 ----
