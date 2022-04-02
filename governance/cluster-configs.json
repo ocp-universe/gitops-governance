@@ -3,7 +3,7 @@
     "name": "gov-projects-apps",
     "repo": "https://github.com/ocp-universe/gitops-governance.git",
     "srcPath": "argocd-project-template",
-    "revision": "main",
+    "revision": "stage-b",
     "namespace": "openshift-gitops",
     "project": "default",
     "valueFile": "",
