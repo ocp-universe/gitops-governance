@@ -70,7 +70,8 @@ This chapters list all the available features in this setup
 * manages all cluster capabilities in a JSON file which is the base for `ApplicationSet`
 * creates for any team/project an own `ArgoCD` and `Project` instance
 * bound git repo of the team to the ArgoCD Project instance for more/better multi-tenant restriction
-* define policies and groups which limit the access to the ArgoCD resources
+* define policies which limit the access to the ArgoCD resources
+* define OpenShift Groups which can be used to link users to ArgoCD policy groups
 * creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
 * configures ArgoCD to exclude `PipelineRun` and `TaskRun`, this allows to manually execute/run such runs (for testing)
 * Optimize ArgoCD and enable only selective synchronization (out-of-sync) instead always all resources
