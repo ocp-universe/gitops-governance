@@ -29,7 +29,7 @@ config:
     - name: gov-cluster-config
       #managedNamespace: demo-quarkus-cicd
       repo: https://github.com/ocp-universe/gitops-governance.git
-      branch: main
+      branch: stage-b
       path: 'governance'
       #helmValueFile: values.yaml
       argocdNamespace: openshift-gitops

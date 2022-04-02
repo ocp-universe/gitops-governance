@@ -10,6 +10,16 @@
     "releaseName": ""
   },
   {
+    "name": "external-secrets-operator",
+    "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+    "srcPath": "03-cluster-capabilities/external-secrets-operator",
+    "revision": "main",
+    "namespace": "openshift-gitops",
+    "project": "default",
+    "valueFile": "",
+    "releaseName": ""
+  },
+  {
     "name": "ocp-pipelines",
     "repo": "https://github.com/ocp-universe/ocp-recipes.git",
     "srcPath": "03-cluster-capabilities/ocp-pipelines",
@@ -20,19 +30,9 @@
     "releaseName": ""
   },
   {
-    "name": "sonarqube",
+    "name": "ibm-cloud",
     "repo": "https://github.com/ocp-universe/ocp-recipes.git",
-    "srcPath": "03-cluster-capabilities/sonarqube",
-    "revision": "main",
-    "namespace": "openshift-gitops",
-    "project": "default",
-    "valueFile": "",
-    "releaseName": ""
-  },
-  {
-    "name": "argocd-demo",
-    "repo": "https://github.com/ocp-universe/ocp-recipes.git",
-    "srcPath": "03-cluster-capabilities/argocd-demo/overlays/env1",
+    "srcPath": "03-cluster-capabilities/ibmcloud-operator",
     "revision": "main",
     "namespace": "openshift-gitops",
     "project": "default",
