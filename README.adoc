@@ -19,18 +19,18 @@ The main objective is, to have one place for managing the Kubernetes/OpenShift c
 
 * *bootstrap* the existing cluster with main/base *capabilities* like Pipeline support, Secrets Management or similar
 * *manage* the teams and apps which includes the namespaces and corresponding pipeline configurations
-* all other IT architecture and governance related policies
+* *governance* all other IT architecture and governance related policies
 
 All use cases (features/capabilities) will be handled with OpenShift GitOps/ArgoCD. This allows flexible modification and expansion of the capabilities.
 
-This construct contains the following components
+This solution contains the following components
 
 * link:governance[]: the bootstrap configuration 
 * link:governance/cluster-configs.json[]: the cluster configuration 
-* link:argocd-project-template[]: the ArgoCD configuration which will be applied for the teams/apps
+* link:argocd-project-template[]: the standardized project template as ArgoCD configuration which will be applied for the teams/apps
 * link:tekton[]: Base Tekton task and pipeline definitions
 
-The initial bootstrap will be started with applying the Kubernetes manifest files from link:governance[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the wanted applications and cluster capabilities (like Operators, SonarQube or similar).
+The initial bootstrap will be started with applying the Kubernetes manifest files from link:governance[]. This installs the OpenShift GitOps operator if necessary and register a new ArgoCD `ApplicationSet` listening on the link:governance/cluster-configs.json[], which contains the configuration for all the cluster capabilities (like Operators, SonarQube or similar) and to maintained applications.
 
 This approach allows a very simple extension of the capabilities (aka ArgoCD applications).
 
@@ -67,10 +67,10 @@ image:static/gitops-overview-all.png[]
 This chapters list all the available features in this setup
 
 * uses ArgoCD for the cluster configuration reconciliation 
-* manages all capabilities in a JSON file which is the base for `ApplicationSet`
+* manages all cluster capabilities in a JSON file which is the base for `ApplicationSet`
 * creates for any team/project an own `ArgoCD` and `Project` instance
 * bound git repo of the team to the ArgoCD Project instance for more/better multi-tenant restriction
-* define policies and groups which can be used to access the ArgoCD resources
+* define policies and groups which limit the access to the ArgoCD resources
 * creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
 * configures ArgoCD to exclude `PipelineRun` and `TaskRun`, this allows to manually execute/run such runs (for testing)
 * Optimize ArgoCD and enable only selective synchronization (out-of-sync) instead always all resources
