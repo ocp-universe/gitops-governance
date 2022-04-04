@@ -1,5 +1,6 @@
 {{- range .Values.config.projects }}
 {{ $mangedNamespace := .managedNamespace }}
+{{- if .enabled }}
 {{- range .namespaces }}
 {{- if .create }}
 ---
@@ -13,6 +14,7 @@ metadata:
     #argocd.argoproj.io/managed-by: {{ $.Values.config.bootstrap.argocdNamespace }}
     argocd.argoproj.io/managed-by: {{ $mangedNamespace }}
   name: {{ .namespace }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

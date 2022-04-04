@@ -1,6 +1,7 @@
 # ArgoCD Application: Serves as bootstrap for the custom App
 {{- if not .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
+{{- if .enabled }}
 {{ $mangedNamespace := .managedNamespace }}
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -31,5 +32,6 @@ spec:
     # Turning on selective sync option which will sync only out-of-sync resources
     # reduce the pressure on the API server, helpful in case of many resources
     - ApplyOutOfSyncOnly=true
+{{- end }}
 {{- end }}
 {{- end }}

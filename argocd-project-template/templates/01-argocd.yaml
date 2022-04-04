@@ -1,6 +1,7 @@
 
 # ArgoCD
 {{- range .Values.config.projects }}
+{{- if .enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ArgoCD
@@ -84,4 +85,5 @@ spec:
       - "TaskRun"
       clusters:
       - "*"
+{{- end }}
 {{- end }}

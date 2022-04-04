@@ -92,6 +92,7 @@ rules:
 # #######
 # Assign rolebindings so that ArgoCD can apply the manifests
 {{- range .Values.config.projects }}
+{{- if .enabled }}
 {{ $managedNamespace := .managedNamespace }}
 {{ $projectName := .name }}
 {{- range .namespaces }}
@@ -125,6 +126,7 @@ subjects:
 - kind: ServiceAccount
   name: "{{ $projectName }}-argocd-application-controller"
   namespace: {{ $managedNamespace }} 
+{{- end }}
 {{- end }}
 {{- end }}
 

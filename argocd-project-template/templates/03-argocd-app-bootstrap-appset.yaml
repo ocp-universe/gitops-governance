@@ -4,6 +4,7 @@
 # - env specific value files
 {{- if .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
+{{- if .enabled }}
 {{- if .configJson }}
 {{ $mangedNamespace := .managedNamespace }}
 ---
@@ -43,6 +44,7 @@ spec:
         # Turning on selective sync option which will sync only out-of-sync resources
         # reduce the pressure on the API server, helpful in case of many resources
         - ApplyOutOfSyncOnly=true
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
