@@ -31,5 +31,6 @@ resources:
 #- 07-templates/template-app-ci-build-from-push.yaml
 #- 07-templates/template-ci-dryrun-from-push.yaml
 - 07-templates/template-maven-ci-build-from-push.yaml
-- 08-eventlisteners/cicd-event-listener.yaml
+#- 08-eventlisteners/cicd-event-listener.yaml
+- 08-eventlisteners/cicd-event-listener-v0.14.yaml
 - 09-routes/gitops-webhook-event-listener.yaml

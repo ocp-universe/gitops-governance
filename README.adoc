@@ -82,7 +82,7 @@ This chapters list all the available features in this setup
 
 .Initialize
 ----
-$ helm template gov gitops-bootstrap --output-dir=work/gov
+$ helm template gov gitops-bootstrap --output-dir=work/gov -f gitops-bootstrap/values.<...>.yaml
 
 $ oc apply -f work/gov/argocd/templates
 ----
