@@ -41,7 +41,7 @@ config:
         create: true
       tekton:
         repo: https://github.com/ocp-universe/gitops-governance.git
-        branch: main
+        branch: stage-b
         path: 'tekton/cicd/overlays'
     - name: demo-team2
       enabled: false
