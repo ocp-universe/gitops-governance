@@ -209,17 +209,10 @@ spec:
 
         git config --global user.email "gitops@haddouti.com"
         git config --global user.name "GitOps Pipeline"
-
-
-
+        
         git add "."
         git status
         git commit -m "[ci] Image digest updated"
-
-        git remote -v
-        
-        git show-ref
-        #eval "$(ssh-agent -s)"
 
         git push origin $(params.GIT_REVISION) -v
       securityContext:
