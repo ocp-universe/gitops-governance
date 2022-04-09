@@ -107,13 +107,13 @@ spec:
         - name: REGISTRY_USER
           valueFrom:
             secretKeyRef:
-              name: ibm-cr-push-secret
+              name: external-cr-push-secret
               key: username
               optional: true
         - name: REGISTRY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: ibm-cr-push-secret
+              name: external-cr-push-secret
               key: password
               optional: true
       securityContext:
