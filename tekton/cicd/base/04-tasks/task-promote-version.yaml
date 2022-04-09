@@ -223,6 +223,8 @@ spec:
         ls -l ~/.ssh
         cat ~/.ssh/id_ssh-key-github
         eval "$(ssh-agent -s)"
+
+        ls -l /lib/x86_64-linux-gnu/
         
         id
 
