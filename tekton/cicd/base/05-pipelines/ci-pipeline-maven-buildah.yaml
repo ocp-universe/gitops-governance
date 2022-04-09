@@ -222,7 +222,7 @@ spec:
       name: promote-version
     workspaces:
     - name: source
-      workspace: shared-data
+      workspace: temp-workspace
   workspaces:
   - description: This workspace will receive the cloned git repo.
     name: shared-data
@@ -230,3 +230,5 @@ spec:
     name: maven-settings
   - description: This workspace will hold the SonarQube Settings (temp dir).
     name: sonar-settings
+  - description: This workspace will used for internal/temp data (not persistent).
+    name: temp-workspace
