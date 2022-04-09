@@ -164,7 +164,7 @@ spec:
         fi
 
         chmod -R o+w "$CHECKOUT_DIR"
-        
+
         # ensure we don't add a trailing newline to the result
         echo -n "$RESULT_SHA" > $(results.commit.path)
 
@@ -211,7 +211,8 @@ spec:
 
 
         git add "."
-        git commit -m "Updates "
-        git push -v
+        git status
+        git commit -m "[ci] Image digest updated"
+        git push origin $(params.GIT_REVISION) -v
       securityContext:
         privileged: true
