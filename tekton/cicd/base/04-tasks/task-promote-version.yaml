@@ -162,6 +162,8 @@ spec:
         if [ "$EXIT_CODE" != 0 ] ; then
           exit $EXIT_CODE
         fi
+        
+        git checkout -b $(params.GIT_REVISION)
 
         chmod -R o+w "$CHECKOUT_DIR"
 
