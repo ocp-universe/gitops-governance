@@ -107,14 +107,14 @@ spec:
         - name: REGISTRY_USER
           valueFrom:
             secretKeyRef:
-              name: registry-access
-              key: REGISTRY_USER
+              name: ibm-cr-push-secret
+              key: username
               optional: true
         - name: REGISTRY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: registry-access
-              key: REGISTRY_PASSWORD
+              name: ibm-cr-push-secret
+              key: password
               optional: true
       securityContext:
         privileged: true
