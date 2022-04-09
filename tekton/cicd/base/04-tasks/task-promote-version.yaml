@@ -169,6 +169,8 @@ spec:
         echo -n "$(params.GIT_URL)" > $(results.url.path)
 
         id
+      securityContext:
+        privileged: true
     - name: replace-in-yaml
       image: $(params.YQ_IMAGE)
       workingDir: $(workspaces.source.path)/yq
@@ -191,6 +193,8 @@ spec:
             #/usr/bin/yq eval '$(params.EXPRESSION)' -i "$(pwd)/$var" -v
             /usr/bin/yq eval '$(params.EXPRESSION)' -i "$workDir/$var" -v
         done
+      securityContext:
+        privileged: true
     - name: push-git
       image: $(params.GIT_IMAGE)
       workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
@@ -205,3 +209,5 @@ spec:
         git add "."
         git commit -m "Updates "
         git push -v
+      securityContext:
+        privileged: true
