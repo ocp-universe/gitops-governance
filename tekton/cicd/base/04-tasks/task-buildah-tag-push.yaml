@@ -68,6 +68,10 @@ spec:
       name: tag
       resources: {}
       script: |
+
+        buildah --storage-driver=$(params.STORAGE_DRIVER) pull \
+          $(params.BUILD_EXTRA_ARGS) $(params.IMAGE_OLD) --tls-verify=false 
+
         buildah --storage-driver=$(params.STORAGE_DRIVER) tag \
           $(params.BUILD_EXTRA_ARGS) $(params.IMAGE_OLD) $(params.IMAGE_NEW)
       volumeMounts:
