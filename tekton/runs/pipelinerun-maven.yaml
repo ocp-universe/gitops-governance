@@ -27,7 +27,7 @@ spec:
     - name: IMAGE
       value: "image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground:latest"
     - name: IMAGE_REMOTE_CR
-      value: "de.icr.io/demo/demo-quarkus/quarkus-playground:latest"
+      value: "de.icr.io/demo-devsecops/quarkus-playground:latest"
     - name: APP_IMAGE_BASE
       value: ""
     - name: APP_IMAGE_TAGS
@@ -52,7 +52,8 @@ spec:
     - name: SONAR_TOKEN_SECRET_NAME
       value: "sonarqube-token-secret"
     - name: GIT_CONFIG_REPO
-      value: "https://github.com/haf-tech/quarkus-playground-config"
+      #value: "https://github.com/haf-tech/quarkus-playground-config"
+      value: "git@github.com:haf-tech/quarkus-playground-config.git"
     - name: GIT_CONFIG_REF
       value: "test-promotion"
     - name: REMOTE_CR_PUSH_ENABLED

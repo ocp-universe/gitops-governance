@@ -97,7 +97,7 @@ spec:
     - name: maven-settings
       workspace: maven-settings
   # ##################
-  # Build app
+  # Scan app
   - name: sonarqube-scan
     params:
     - name: SONAR_HOST_URL

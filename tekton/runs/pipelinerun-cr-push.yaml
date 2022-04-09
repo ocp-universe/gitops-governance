@@ -11,7 +11,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: quarkus-promote-run-
+  generateName: quarkus-cr-push-run-
 spec:
   params:
     - name: REPO
@@ -27,7 +27,7 @@ spec:
     - name: IMAGE
       value: "image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground:latest"
     - name: IMAGE_REMOTE_CR
-      value: "de.icr.io/demo/demo-quarkus/quarkus-playground:latest"
+      value: "de.icr.io/demo-quarkus/quarkus-playground:latest"
     - name: APP_IMAGE_BASE
       value: ""
     - name: APP_IMAGE_TAGS
@@ -60,7 +60,7 @@ spec:
     - name: REMOTE_CR_PUSH_ENABLED
       value: "false"
   pipelineRef:
-    name: ci-pipeline-promote
+    name: ci-pipeline-cr-push
   podTemplate:
     securityContext:
       runAsNonRoot: true
