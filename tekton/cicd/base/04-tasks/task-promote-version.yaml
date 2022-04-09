@@ -202,7 +202,8 @@ spec:
       securityContext:
         privileged: true
     - name: push-git
-      image: $(params.GIT_IMAGE)
+      #image: $(params.GIT_IMAGE)
+      image: 'docker.io/alpine/git:v2.26.2'
       workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
       script: |
         #!/bin/sh
@@ -225,7 +226,7 @@ spec:
         eval "$(ssh-agent -s)"
 
         ls -l /lib/x86_64-linux-gnu/
-        
+
         id
 
         git push origin $(params.GIT_REVISION) -v
