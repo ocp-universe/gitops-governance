@@ -163,6 +163,8 @@ spec:
           exit $EXIT_CODE
         fi
 
+        chmod -R o+w "$CHECKOUT_DIR"
+        
         # ensure we don't add a trailing newline to the result
         echo -n "$RESULT_SHA" > $(results.commit.path)
 
