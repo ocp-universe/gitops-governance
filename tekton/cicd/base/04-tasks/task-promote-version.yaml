@@ -213,6 +213,11 @@ spec:
         git add "."
         git status
         git commit -m "[ci] Image digest updated"
+
+        git remote -v
+        
+        git show-ref
+
         git push origin $(params.GIT_REVISION) -v
       securityContext:
         privileged: true
