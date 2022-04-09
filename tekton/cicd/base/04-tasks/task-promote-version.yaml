@@ -108,6 +108,7 @@ spec:
   steps:
     - image: $(params.GIT_IMAGE)
       name: clone
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
       script: >
         #!/bin/sh
 
@@ -163,7 +164,6 @@ spec:
         fi
 
         # ensure we don't add a trailing newline to the result
-
         echo -n "$RESULT_SHA" > $(results.commit.path)
 
         echo -n "$(params.GIT_URL)" > $(results.url.path)
@@ -173,20 +173,22 @@ spec:
         privileged: true
     - name: replace-in-yaml
       image: $(params.YQ_IMAGE)
-      workingDir: $(workspaces.source.path)/yq
+      #workingDir: $(workspaces.source.path)/yq
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
       args: ["$(params.FILES[*])"]
       script: |
         #!/bin/sh
 
         id
 
-        workDir=$(workspaces.source.path)/yq
+        #workDir=$(workspaces.source.path)/yq
+        workDir=$(pwd)
         echo "---------------"
         echo $(pwd)
         echo $workDir
         echo "---------------"
-        cp -r $(workspaces.source.path)/$(params.CONTEXT_DIR)/* $workDir
-        chmod -R +w $workDir
+        #cp -r $(workspaces.source.path)/$(params.CONTEXT_DIR)/* $workDir
+        #chmod -R +w $workDir
 
         for var in "$@"
         do
