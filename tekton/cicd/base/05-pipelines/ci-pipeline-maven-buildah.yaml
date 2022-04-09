@@ -161,6 +161,8 @@ spec:
     params:
     - name: IMAGE_OLD
       value: $(params.IMAGE)
+    - name: IMAGE_OLD_DIGEST
+      value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: IMAGE_NEW
       value: $(params.IMAGE_REMOTE_CR)
     runAfter:

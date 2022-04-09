@@ -22,6 +22,10 @@ spec:
     - description: Reference of the exiting image (incl. tag).
       name: IMAGE_OLD
       type: string
+    - description: Reference of the exiting image digest
+      name: IMAGE_OLD_DIGEST
+      type: string
+      default: 'latest'
     - description: Reference of the new image buildah will produce.
       name: IMAGE_NEW
       type: string
@@ -68,6 +72,9 @@ spec:
       name: tag
       resources: {}
       script: |
+
+        echo "ImageDigest "
+        echo $(param.IMAGE_OLD_DIGEST)
 
         buildah --storage-driver=$(params.STORAGE_DRIVER) pull --tls-verify=false \
           $(params.BUILD_EXTRA_ARGS) $(params.IMAGE_OLD)
