@@ -221,8 +221,10 @@ spec:
         git show-ref
 
         ls -l ~/.ssh
-        id
+        cat ~/.ssh/id_ssh-key-github
         
+        id
+
         git push origin $(params.GIT_REVISION) -v
       securityContext:
         privileged: true
