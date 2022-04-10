@@ -27,11 +27,14 @@ spec:
     - name: GIT_REVISION
       default: master
       type: string
-    - default: /source
-      name: source-dir
+    - name: source-dir
+      default: /source
       type: string
     - name: image-url
-      description: "The location of image to scan on IBM Container Registry <server>/<namespace>/<repository>:<tag>"
+      description: "The location of image to scan <server>/<namespace>/<repository>>"
+    - name: image-version
+      description: "The image version/tag, will be concat with image-url to <server>/<namespace>/<repository>:<tag>"
+      default: 'latest'
     - name: scan-image
       description: Flag indicating that a scan should be performed
       default: "false"
@@ -83,7 +86,7 @@ spec:
           echo "User selected to skip scanning. Skipping Trivy scan."
           exit 0
         fi
-        IMAGE_FROM=$(params.image-url)
+        IMAGE_FROM=$(params.image-url):$(params.image-version)
         REGISTRY_SERVER_FROM=$(echo "${IMAGE_FROM}" | awk -F / '{print $1}')
         IMAGE_TO="oci:/var/oci/image"
         IMAGE_FROM_TLS_VERIFY=$(params.IMAGE_FROM_TLS_VERIFY)

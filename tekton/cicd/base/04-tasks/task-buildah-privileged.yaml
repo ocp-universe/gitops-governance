@@ -25,43 +25,47 @@ spec:
     Dockerfile to assemble a container image, then pushes that image to a
     container registry.
   params:
-    - description: Reference of the image buildah will produce.
-      name: IMAGE
+    - name: IMAGE
+      description: Reference of the image buildah will produce.
       type: string
-    - default: >-
+    - name: IMAGE_VERSION
+      description: Target image version.
+      type: string
+      default: 'latest'
+    - name: BUILDER_IMAGE
+      default: >-
         registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13
       description: The location of the buildah builder image.
-      name: BUILDER_IMAGE
       type: string
-    - default: vfs
+    - name: STORAGE_DRIVER
+      default: vfs
       description: Set buildah storage driver
-      name: STORAGE_DRIVER
       type: string
-    - default: ./Dockerfile
+    - name: DOCKERFILE
+      default: ./Dockerfile
       description: Path to the Dockerfile to build.
-      name: DOCKERFILE
       type: string
-    - default: 'src'
+    - name: CONTEXT
+      default: 'src'
       description: Path to the directory to use as context.
-      name: CONTEXT
       type: string
-    - default: 'true'
+    - name: TLSVERIFY
+      default: 'true'
       description: >-
         Verify the TLS on the registry endpoint (for push/pull to a non-TLS
         registry)
-      name: TLSVERIFY
       type: string
-    - default: oci
+    - name: FORMAT
+      default: oci
       description: 'The format of the built container, oci or docker'
-      name: FORMAT
       type: string
-    - default: ''
+    - name: BUILD_EXTRA_ARGS
+      default: ''
       description: Extra parameters passed for the build command when building images.
-      name: BUILD_EXTRA_ARGS
       type: string
-    - default: ''
+    - name: PUSH_EXTRA_ARGS
+      default: ''
       description: Extra parameters passed for the push command when pushing images.
-      name: PUSH_EXTRA_ARGS
       type: string
   results:
     - description: Digest of the image just built.
@@ -71,10 +75,13 @@ spec:
       name: build
       resources: {}
       script: |
+
+        imgUrl=$(params.IMAGE):$(params.IMAGE_VERSION)
+
         buildah --storage-driver=$(params.STORAGE_DRIVER) bud \
           $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \
           --tls-verify=$(params.TLSVERIFY) --no-cache \
-          -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+          -f $(params.DOCKERFILE) -t $imgUrl $(params.CONTEXT)
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers
@@ -85,10 +92,12 @@ spec:
       name: push
       resources: {}
       script: |
+        imgUrl=$(params.IMAGE):$(params.IMAGE_VERSION)
+
         buildah --storage-driver=$(params.STORAGE_DRIVER) push \
           $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \
-          --digestfile $(workspaces.source.path)/image-digest $(params.IMAGE) \
-          docker://$(params.IMAGE)
+          --digestfile $(workspaces.source.path)/image-digest $imgUrl \
+          docker://$imgUrl
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers

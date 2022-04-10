@@ -24,8 +24,12 @@ spec:
   - name: DOCKERFILE
     type: string
   - name: IMAGE
-    description: Image url (incl. tag/version) for a internal CR
+    description: Image url (without tag/version), for a internal CR
     type: string
+  - name: IMAGE_VERSION
+    description: Image version/tag (default is latest), for a internal CR
+    type: string
+    default: 'latest'
   - name: IMAGE_REMOTE_CR
     description: Image url (incl. tag/version) for a remote CR
     type: string
@@ -134,6 +138,8 @@ spec:
       value: $(params.DOCKERFILE)
     - name: IMAGE
       value: $(params.IMAGE)
+    - name: IMAGE_VERSION
+      value: $(params.IMAGE_VERSION)
     runAfter:
     - build-app
     taskRef:
@@ -148,6 +154,8 @@ spec:
     params:
     - name: image-url
       value: $(params.IMAGE)
+    - name: image-version
+      value: $(params.IMAGE_VERSION)
     - name: scan-image
       value: $(params.IMAGE_SCAN_ENABLED)
     runAfter:
@@ -174,28 +182,6 @@ spec:
     taskRef:
       kind: Task
       name: buildah-tag-push
-  # ##################
-  # Git clone manifest
-  - name: clone-manifest
-    params:
-    - name: url
-      value: $(params.GIT_CONFIG_REPO)
-    - name: revision
-      value: $(params.GIT_CONFIG_REF)
-    - name: subdirectory
-      value: 'src_manifest'
-    when:
-      - input: "$(params.REMOTE_CR_PUSH_ENABLED)"
-        operator: in
-        values: ["never111"]
-    runAfter:
-    - img-scan-trivy
-    taskRef:
-      kind: ClusterTask
-      name: git-clone
-    workspaces:
-    - name: output
-      workspace: shared-data
   # ##################
   # Promote version and push back to git
   - name: promote-version
