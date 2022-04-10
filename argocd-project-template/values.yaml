@@ -26,7 +26,7 @@ config:
       enabled: true
       managedNamespace: demo-quarkus-cicd
       repo: https://github.com/haf-tech/quarkus-playground-config.git
-      branch: test-promotion
+      branch: main
       path: 'argocd'
       helmValueFile: values.yaml
       configJson: config.json
