@@ -117,3 +117,5 @@ spec:
             echo "VA Warning: non-OK status from Vulnerability Advisor ${VA_STATUS}"
             cat va-result.json | jq -r '.[]'
           fi
+
+          exit 0
