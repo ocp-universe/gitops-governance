@@ -221,7 +221,7 @@ spec:
     - name: EXPRESSION
       value: '.image.digest="$(tasks.build-image.results.IMAGE_DIGEST)"'
     runAfter:
-    - img-scan-trivy
+    - verify-va
     when:
       - input: "$(params.PROMOTE_VERSION_ENABLED)"
         operator: in
