@@ -18,17 +18,8 @@ metadata:
     version: 0.0.0
 spec:
   params:
-    - name: GIT_URL
-      default: ''
-      description: >-
-        URL of git repo, if provided it allows .trivyignore to be used from
-        project source when running scan
-      type: string
-    - name: GIT_REVISION
-      default: master
-      type: string
-    - default: /source
-      name: source-dir
+    - name: source-dir
+      default: /source      
       type: string
     - name: image-url
       description: "The location of image to scan on IBM Container Registry <server>/<namespace>/<repository>:<tag>"
@@ -57,15 +48,11 @@ spec:
         - name: IBM_CLOUD_APIKEY
           valueFrom:
             secretKeyRef:
-              key: APIKEY
-              name: ibmcloud-apikey
+              key: password
+              name: external-cr-push-secret
               optional: true
         - name: IBM_CLOUD_REGION
-          valueFrom:
-            configMapKeyRef:
-              name: ibmcloud-config
-              key: REGION
-              optional: true
+          value: "eu-de"
       script: |
           #!/usr/bin/env bash
           set -ex

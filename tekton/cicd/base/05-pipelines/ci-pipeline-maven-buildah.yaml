@@ -63,6 +63,10 @@ spec:
     type: string
     description: If tag and push to a remote CR is wanted or not
     default: "true"
+  - name: VERIFY_CR_VA_ENABLED
+    type: string
+    description: If verifying va result in remote CR is wanted or not
+    default: "true"
   - name: PROMOTE_VERSION_ENABLED
     type: string
     description: If promoting version back to git is wanted
@@ -182,6 +186,23 @@ spec:
     taskRef:
       kind: Task
       name: buildah-tag-push
+  # ##################
+  # Verify CR VA results
+  - name: verify-va
+    params:
+    - name: image-url
+      value: $(params.IMAGE_REMOTE_CR)
+    - name: scan-ibm
+      value: $(params.VERIFY_CR_VA_ENABLED)    
+    runAfter:
+    - tag-push
+    when:
+      - input: "$(params.VERIFY_CR_VA_ENABLED)"
+        operator: in
+        values: ["true"]
+    taskRef:
+      kind: Task
+      name: ibm-img-scan-va
   # ##################
   # Promote version and push back to git
   - name: promote-version
