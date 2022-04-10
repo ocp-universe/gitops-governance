@@ -76,11 +76,13 @@ spec:
         echo "ImageDigest "
         echo $(params.IMAGE_OLD_DIGEST)
 
+        imgUrl="$(params.IMAGE_OLD)@$(params.IMAGE_OLD_DIGEST)"
+
         buildah --storage-driver=$(params.STORAGE_DRIVER) pull --tls-verify=false \
-          $(params.BUILD_EXTRA_ARGS) $(params.IMAGE_OLD)
+          $(params.BUILD_EXTRA_ARGS) $imgUrl
 
         buildah --storage-driver=$(params.STORAGE_DRIVER) tag \
-          $(params.BUILD_EXTRA_ARGS) $(params.IMAGE_OLD) $(params.IMAGE_NEW)
+          $(params.BUILD_EXTRA_ARGS) $imgUrl $(params.IMAGE_NEW)
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers
