@@ -25,18 +25,20 @@ spec:
     - name: DOCKERFILE
       value: "./src/main/docker/Dockerfile.jvm"
     - name: IMAGE
-      value: "image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground:latest"
+      value: "image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground"
+    - name: IMAGE_VERSION
+      value: "latest"
     - name: IMAGE_REMOTE_CR
       value: "de.icr.io/demo-devsecops/quarkus-playground:latest"
-    - name: APP_IMAGE_BASE
-      value: ""
-    - name: APP_IMAGE_TAGS
-      value: 
-        - "main-latest"
-        - "latest"
+#    - name: APP_IMAGE_BASE
+#      value: ""
+#    - name: APP_IMAGE_TAGS
+#      value: 
+#        - "main-latest"
+#        - "latest"
     - name: MAVEN_GOALS
       #value: "package -Dmaven.test.skip=true"
-      value: ["-Dmaven.test.skip=false", "package"]
+      value: ["-Dmaven.test.skip=false", "-ntp", "package"]
     - name: COMMIT_SHA
       value: "1233"
     - name: GIT_REF
@@ -47,6 +49,8 @@ spec:
       value: "code@haddouti.com"
     - name: COMMIT_MESSAGE
       value: "Test PipelineRun"
+    - name: SONAR_ENABLED
+      value: "false"
     - name: SONAR_PROJECT_KEY
       value: "quarkus-demo"
     - name: SONAR_TOKEN_SECRET_NAME
@@ -57,14 +61,24 @@ spec:
     - name: GIT_CONFIG_REF
       value: "test-promotion"
     - name: REMOTE_CR_PUSH_ENABLED
-      value: "false"
+      value: "true"
   pipelineRef:
     name: ci-pipeline-maven-buildah
+  taskRunSpecs:
+    - pipelineTaskName: promote-version
+      taskPodTemplate:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 0
+          fsGroup: 0
   serviceAccountName: pipeline
   workspaces:
   - name: maven-settings
     emptyDir: {}
   - name: sonar-settings
+    emptyDir: {}
+  - name: temp-workspace
     emptyDir: {}
   - name: shared-data
     persistentVolumeClaim:
