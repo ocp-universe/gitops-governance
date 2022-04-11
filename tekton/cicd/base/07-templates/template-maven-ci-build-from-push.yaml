@@ -51,16 +51,18 @@ spec:
       - name: DOCKERFILE
         value: $(tt.params.dockerFile)
       - name: IMAGE
-        value: $(tt.params.imageRepo):$(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
-      - name: APP_IMAGE_BASE
         value: $(tt.params.imageRepo)
-      - name: APP_IMAGE_TAGS
-        value: 
-         - $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
-         - $(tt.params.imageTag)
+      - name: IMAGE_VERSION
+        value: $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
+#      - name: APP_IMAGE_BASE
+#        value: $(tt.params.imageRepo)
+#      - name: APP_IMAGE_TAGS
+#        value: 
+#         - $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
+#         - $(tt.params.imageTag)
       - name: MAVEN_GOALS
         #value: "package -Dmaven.test.skip=true"
-        value: ["-Dmaven.test.skip=true", "package"]
+        value: ["-Dmaven.test.skip=false", "-ntp", "package"]
       - name: COMMIT_SHA
         value: $(tt.params.io.openshift.build.commit.id)
       - name: GIT_REF
@@ -71,22 +73,40 @@ spec:
         value: $(tt.params.io.openshift.build.commit.author)
       - name: COMMIT_MESSAGE
         value: $(tt.params.io.openshift.build.commit.message)
+      - name: SONAR_ENABLED
+        value: "true"
+      - name: SONAR_PROJECT_KEY
+        value: "quarkus-demo"
+      - name: SONAR_TOKEN_SECRET_NAME
+        value: "sonarqube-token-secret"
+      - name: GIT_CONFIG_REPO
+        #value: "https://github.com/haf-tech/quarkus-playground-config"
+        value: "git@github.com:haf-tech/quarkus-playground-config.git"
+      - name: GIT_CONFIG_REF
+        value: "test-promotion"
+      - name: REMOTE_CR_PUSH_ENABLED
+        value: "true"
       pipelineRef:
         name: ci-pipeline-maven-buildah
       serviceAccountName: pipeline
+      taskRunSpecs:
+      - pipelineTaskName: promote-version
+        taskPodTemplate:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 0
+            fsGroup: 0
       workspaces:
       - name: maven-settings
         emptyDir: {}
+      - name: sonar-settings
+        emptyDir: {}
+      - name: temp-workspace
+        emptyDir: {}
       - name: shared-data
-        volumeClaimTemplate:
-          metadata:
-            creationTimestamp: null
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 1Gi
-          status: {}
+        persistentVolumeClaim:
+          #claimName: pipeline-repo-pvc
+          claimName: pipeline-repo-rwm-pvc
     status: {}
 status: {}
