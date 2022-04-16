@@ -47,7 +47,7 @@ spec:
           cd $workDir
 
           echo -e "Generate SBOM without input..."          
-          cyclonedx-cli add files --no-input --output-format json --output-file sbom.json --exclude /.git/**
+          cyclonedx add files --no-input --output-format json --output-file sbom.json --exclude /.git/**
 
           echo -e "...SBOM generated."
           cat sbom.json
@@ -69,7 +69,7 @@ spec:
           cd $workDir
 
           echo -e "Analyse SBOM ..."          
-          cyclonedx-cli analyze --input-file sbom.json --multiple-component-versions
+          cyclonedx analyze --input-file sbom.json --multiple-component-versions
 
           echo -e "SBOM Analysis done."
 
@@ -88,7 +88,7 @@ spec:
           cd $workDir
 
           echo -e "Validate SBOM ..."          
-          cyclonedx-cli validate --input-file sbom.json --fail-on-errors
+          cyclonedx validate --input-file sbom.json --fail-on-errors
           
   workspaces:
   - name: source
