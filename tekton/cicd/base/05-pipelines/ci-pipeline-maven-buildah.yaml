@@ -184,6 +184,9 @@ spec:
     taskRef:
       kind: Task
       name: sbom-cyclonedx
+    workspaces:
+    - name: source
+      workspace: shared-data
   # ##################
   # Tag and Push image to remote CR
   - name: tag-push
