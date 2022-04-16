@@ -168,6 +168,23 @@ spec:
       kind: Task
       name: ibm-img-scan-trivy
   # ##################
+  # SBOM
+  - name: sbom
+    params:
+    - name: CONTEXT_DIR
+      value: 'src'
+    - name: GENERATE_BOM
+      value: "true"
+    - name: ANALYSE_BOM
+      value: "true"
+    - name: VALIDATE_BOM
+      value: "true"
+    runAfter:
+    - img-scan-trivy
+    taskRef:
+      kind: Task
+      name: sbom-cyclonedx
+  # ##################
   # Tag and Push image to remote CR
   - name: tag-push
     params:
@@ -178,7 +195,7 @@ spec:
     - name: IMAGE_NEW
       value: $(params.IMAGE_REMOTE_CR)
     runAfter:
-    - img-scan-trivy
+    - sbom
     when:
       - input: "$(params.REMOTE_CR_PUSH_ENABLED)"
         operator: in

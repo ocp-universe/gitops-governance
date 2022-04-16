@@ -1,0 +1,94 @@
+# Task: cyclonedx - SBOM
+# Source: https://cyclonedx.org/
+# v0.0.0
+#
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: sbom-cyclonedx
+  annotations:
+    description: Generate and analyse Software Bill of Material.
+    app.openshift.io/description: Generate and analyse Software Bill of Material.
+    app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
+    app.openshift.io/vcs-ref: main
+  labels:
+    version: 0.0.1
+spec:
+  params:
+    - name: CONTEXT_DIR
+      description: Context directory in the workspace
+      default: "."
+      type: string
+    - name: GENERATE_BOM
+      description: Flag indicating that a BOM should be generated
+      default: "false"
+    - name: ANALYSE_BOM
+      description: Flag indicating that a BOM should be analysed
+      default: "false"
+    - name: VALIDATE_BOM
+      description: Flag indicating that a BOM should be validated
+      default: "false"
+    - name: SBOM_IMAGE
+      default: docker.io/cyclonedx/cyclonedx-cli:0.24.0
+  steps:
+    - name: generate
+      image: $(params.SBOM_IMAGE)
+      workingDir: $(workspaces.source.path)
+      script: |
+          set -e
+          PERFORM_GENERATION="$(params.GENERATE_BOM)"
+          if [[ "${PERFORM_GENERATION}" == "false" ]] || [[ -z "${PERFORM_GENERATION}" ]]; then
+            echo "User selected to skip generation. Skipping SBOM generation."
+            exit 0
+          fi
+
+          workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
+          cd $workDir
+
+          echo -e "Generate SBOM without input..."          
+          cyclonedx-cli add files --no-input --output-format json --output-file sbom.json --exclude /.git/**
+
+          echo -e "...SBOM generated."
+          cat sbom.json
+
+          echo -e "SBOM Generation done."
+
+    - name: analyse
+      image: $(params.SBOM_IMAGE)      
+      workingDir: $(workspaces.source.path)
+      script: |
+          set -e
+          PERFORM_ANALYSIS="$(params.ANALYSE_BOM)"
+          if [[ "${PERFORM_ANALYSIS}" == "false" ]] || [[ -z "${PERFORM_ANALYSIS}" ]]; then
+            echo "User selected to skip bom analysis. Skipping step."
+            exit 0
+          fi
+
+          workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
+          cd $workDir
+
+          echo -e "Analyse SBOM ..."          
+          cyclonedx-cli analyze --input-file sbom.json --multiple-component-versions
+
+          echo -e "SBOM Analysis done."
+
+    - name: validate
+      image: $(params.SBOM_IMAGE)      
+      workingDir: $(workspaces.source.path)
+      script: |
+          set -e
+          PERFORM_VALIDATION="$(params.VALIDATE_BOM)"
+          if [[ "${PERFORM_ANALYSIS}" == "false" ]] || [[ -z "${PERFORM_ANALYSIS}" ]]; then
+            echo "User selected to skip bom validation. Skipping step."
+            exit 0
+          fi
+
+          workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
+          cd $workDir
+
+          echo -e "Validate SBOM ..."          
+          cyclonedx-cli validate --input-file sbom.json --fail-on-errors
+          
+  workspaces:
+  - name: source
