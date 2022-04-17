@@ -118,8 +118,6 @@ spec:
       script: |
           #!/bin/sh
 
-          set -e
-
           PERFORM_SCAN="$(params.scan-image)"
           if [[ "${PERFORM_SCAN}" == "false" ]] || [[ -z "${PERFORM_SCAN}" ]]; then
             echo "User selected to skip scanning. Skipping Trivy scan."
