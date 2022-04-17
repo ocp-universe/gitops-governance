@@ -178,7 +178,9 @@ spec:
     - name: ANALYSE_BOM
       value: "true"
     - name: VALIDATE_BOM
-      value: "true"
+      value: "false"
+    - name: EXISTING_BOM
+      value: "target/sbom.json"
     runAfter:
     - img-scan-trivy
     taskRef:
