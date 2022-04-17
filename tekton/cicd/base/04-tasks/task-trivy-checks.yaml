@@ -65,7 +65,7 @@ spec:
       image: $(params.TRIVY_IMAGE)
       workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
       script: |
-          #!/bin/bash
+          #!/bin/sh
           set -e
 
           PERFORM_CHECK="$(params.CHECK_IAC)"
