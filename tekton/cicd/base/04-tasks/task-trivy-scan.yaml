@@ -133,6 +133,7 @@ spec:
           echo "Scan exit code :--- $my_exit_code"
           if [ ${my_exit_code} == 1 ]; then
               echo -e "Trivy scanning completed. CRITICAL Vulnerabilities found."
+              cat sbom-image.json
               exit 1
           else
             echo -e "Trivy scanning completed. CRITICAL vulnerabilities not found."
