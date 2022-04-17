@@ -17,7 +17,7 @@ resources:
 - 04-tasks/task-buildah-tag-push.yaml
 - 04-tasks/task-sonarqube-scanner.yaml
 - 04-tasks/task-trivy-scan.yaml
-- 04-tasks/task-trivy-check.yaml
+- 04-tasks/task-trivy-checks.yaml
 - 04-tasks/task-ibm-va.yaml
 - 04-tasks/task-yq.yaml
 - 04-tasks/task-promote-version.yaml
