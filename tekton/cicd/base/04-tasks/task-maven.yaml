@@ -72,7 +72,7 @@ spec:
     resources:
       requests:
         cpu: 500m
-        memory: 500MB
+        memory: 500Mi
   steps:
     - name: mvn-settings
       image: 'registry.access.redhat.com/ubi8/ubi-minimal:8.2'
