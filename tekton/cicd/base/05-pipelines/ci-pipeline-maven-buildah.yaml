@@ -136,6 +136,8 @@ spec:
       value: "true"
     - name: CHECK_IAC
       value: "true"    
+    - name: CONTEXT_DIR
+      value: "src"    
     runAfter:
     - build-app
     taskRef:
