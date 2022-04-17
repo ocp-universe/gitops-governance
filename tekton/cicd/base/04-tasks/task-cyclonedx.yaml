@@ -89,8 +89,9 @@ spec:
           workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
           cd $workDir
 
-          echo -e "Validate SBOM ..."          
-          /cyclonedx validate --input-file sbom.json --fail-on-errors
+          echo -e "Validate SBOM ..."  
+          ls -l        
+          /cyclonedx validate --input-file sbom.json --input-format json --input-version v1_4 --fail-on-errors
           
   workspaces:
   - name: source
