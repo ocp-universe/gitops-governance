@@ -134,9 +134,9 @@ spec:
           my_exit_code=$?
           echo "Scan exit code :--- $my_exit_code"
           if [ ${my_exit_code} == 1 ]; then
-              echo "Trivy scanning completed. CRITICAL Vulnerabilities found."
+              echo -e "Trivy scanning completed. CRITICAL Vulnerabilities found."
               exit 1
           else
-            echo "Trivy scanning completed. CRITICAL vulnerabilities not found."
+            echo -e "Trivy scanning completed. CRITICAL vulnerabilities not found."
           fi
     
