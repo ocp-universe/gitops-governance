@@ -7,13 +7,14 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: sbom-cyclonedx
+  labels:
+    app.kubernetes.io/version: "0.1"
   annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
     description: Generate and analyse Software Bill of Material.
     app.openshift.io/description: Generate and analyse Software Bill of Material.
     app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
-    app.openshift.io/vcs-ref: main
-  labels:
-    version: 0.0.1
+    app.openshift.io/vcs-ref: main  
 spec:
   params:
     - name: CONTEXT_DIR
