@@ -128,7 +128,7 @@ spec:
 
           echo -e "Trivy Security Scan image in registry"
           trivy image --exit-code 0 --format cyclonedx --output sbom-image.json --input ${PATH_TO_IMAGE}
-          TRIVY_IGNORE_UNFIXED="$(params.trivy-ignoreUnfixed)" trivy image --exit-code 1 --format cyclonedx --output sbom-image.json --severity CRITICAL --input ${PATH_TO_IMAGE}
+          TRIVY_IGNORE_UNFIXED="$(params.trivy-ignoreUnfixed)" trivy image --exit-code 1 --severity CRITICAL --input ${PATH_TO_IMAGE}
           my_exit_code=$?
           echo "Scan exit code :--- $my_exit_code"
           if [ ${my_exit_code} == 1 ]; then
