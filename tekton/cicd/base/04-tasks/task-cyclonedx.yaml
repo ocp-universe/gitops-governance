@@ -71,7 +71,7 @@ spec:
           cd $workDir
 
           echo -e "Analyse SBOM ..."          
-          cyclonedx analyze --input-file sbom.json --multiple-component-versions
+          /cyclonedx analyze --input-file sbom.json --multiple-component-versions
 
           echo -e "SBOM Analysis done."
 
@@ -90,7 +90,7 @@ spec:
           cd $workDir
 
           echo -e "Validate SBOM ..."          
-          cyclonedx validate --input-file sbom.json --fail-on-errors
+          /cyclonedx validate --input-file sbom.json --fail-on-errors
           
   workspaces:
   - name: source
