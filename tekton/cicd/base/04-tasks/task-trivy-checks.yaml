@@ -32,17 +32,6 @@ spec:
     - name: TRIVY_IMAGE
       #default: quay.io/ibmgaragecloud/aquasec-trivy
       default: docker.io/aquasec/trivy:0.26.0@sha256:9199a32e4e9184eee3868f6774f30abf41e811696d894acee24f4fd3d794e829
-  volumes:
-    - name: oci-image
-      emptyDir: {}
-    - name: source
-      emptyDir: {}
-  stepTemplate:
-    name: ''
-    resources: {}
-    volumeMounts:
-      - mountPath: $(params.source-dir)
-        name: source
   workspaces:
   - name: source
   steps:    
