@@ -55,13 +55,29 @@ spec:
 
           cd $workDir
 
+          # Dependency-Check, fail with CVSS 9 which is CRITICAL
           echo -e "Dependency-check analyzing..."    
-          /usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project $(params.PROJECT_NAME) --out $reportDir
+          /usr/share/dependency-check/bin/dependency-check.sh \
+            --scan . \
+            --format ALL \
+            --project $(params.PROJECT_NAME) \
+            --failOnCVSS 9 \
+            --out $reportDir
+
+          last_exit_code=$?
+          echo "dc exit code: $last_exit_code"
 
           ls -l $reportDir
           cat $reportDir/dependency-check-report.csv
 
-          echo -e "dependency-check done."
+          if [ ${last_exit_code} == 1 ]; then
+              echo -e "dependency-check analysis completed. CRITICAL Vulnerabilities found."
+              
+              exit 1
+          else
+            echo -e "dependency-check analysis completed. CRITICAL vulnerabilities not found."
+          fi
+
   workspaces:
   - name: source
   - name: report
