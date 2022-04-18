@@ -110,6 +110,12 @@ spec:
       script: |
         #cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
         cat $(workspaces.source.path)/image-digest | tee $(results.IMAGE_DIGEST.path)
+    - image: $(params.BUILDER_IMAGE)
+      name: finalizer
+      resources: {}
+      script: |
+        cat $(results.IMAGE_DIGEST.path)
+        echo -e "Done."
   volumes:
     - emptyDir: {}
       name: varlibcontainers
