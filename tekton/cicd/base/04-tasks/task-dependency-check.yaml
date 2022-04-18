@@ -1,0 +1,65 @@
+# Task: Dependency-Check
+# Source: https://github.com/jeremylong/DependencyCheck
+# v0.0.0
+#
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: dependency-check
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: Security
+    description: "Dependency check for OWASP Top 10 2021 entry: A06:2021 – Vulnerable and Outdated Components."
+    app.openshift.io/description: Dependency check to analyse files for vulnerable and outdated components.
+    app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
+    app.openshift.io/vcs-ref: main  
+spec:
+  description: >-
+    Dependency check for OWASP Top 10 2021 entry: A06:2021 – Vulnerable and Outdated Components.
+
+    Dependency check to analyse files for vulnerable and outdated components.
+  params:
+    - name: CONTEXT_DIR
+      description: Context directory in the workspace
+      default: "."
+      type: string
+    - name: CHECK_ENABLED
+      description: Flag indicating that a dependency check should be performed
+      default: "false"
+    - name: PROJECT_NAME
+      description: Name of the project being scanned.
+      default: ""
+    - name: DC_IMAGE
+      default: docker.io/owasp/dependency-check:7.0.4@sha256:b7372649e16c2d92ef4ed7afff2951e8a6de5e270bf1687b282931a34fff1583
+  steps:
+    - name: check
+      image: $(params.DC_IMAGE)
+      workingDir: $(workspaces.source.path)
+      script: |
+          #!/bin/bash
+
+          set -e
+          PERFORM_ACT="$(params.CHECK_ENABLED)"
+          if [[ "${PERFORM_ACT}" == "false" ]] || [[ -z "${PERFORM_ACT}" ]]; then
+            echo "User selected to skip dependency-check. Skipping dc."
+            exit 0
+          fi
+
+          workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
+          reportDir=$(workspaces.source.path)/report
+
+          mkdir -p $reportDir
+
+          cd $workDir
+
+          echo -e "Generate SBOM without input..."    
+          /usr/share/dependency-check/bin/dependency-check.sh --src . --format ALL --project --out $reportDir
+
+          ls -l $reportDir
+
+          echo -e "dependency-check done."
+  workspaces:
+  - name: source
