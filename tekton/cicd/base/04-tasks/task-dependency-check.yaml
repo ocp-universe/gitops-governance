@@ -46,7 +46,6 @@ spec:
       script: |
           #!/bin/sh
 
-          set -e
           PERFORM_ACT="$(params.CHECK_ENABLED)"
           if [[ "${PERFORM_ACT}" == "false" ]] || [[ -z "${PERFORM_ACT}" ]]; then
             echo "User selected to skip dependency-check. Skipping dc."
