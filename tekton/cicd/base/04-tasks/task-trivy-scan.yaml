@@ -137,5 +137,6 @@ spec:
               exit 1
           else
             echo -e "Trivy scanning completed. CRITICAL vulnerabilities not found."
+            exit 0
           fi
     
