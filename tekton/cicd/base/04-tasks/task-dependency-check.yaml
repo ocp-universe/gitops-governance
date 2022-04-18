@@ -21,6 +21,11 @@ spec:
     Dependency check for OWASP Top 10 2021 entry: A06:2021 – Vulnerable and Outdated Components.
 
     Dependency check to analyse files for vulnerable and outdated components.
+    Details about OWASP: https://owasp.org/Top10/
+    Details about rating: https://www.first.org/cvss/specification-document#Qualitative-Severity-Rating-Scale
+
+    Resulting artifacts
+    * Dependency check reports in HTML, JSON, XML, CSV, SARIF
   params:
     - name: CONTEXT_DIR
       description: Context directory in the workspace
