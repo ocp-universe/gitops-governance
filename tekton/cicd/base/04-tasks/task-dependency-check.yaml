@@ -56,7 +56,7 @@ spec:
           cd $workDir
 
           echo -e "Generate SBOM without input..."    
-          /usr/share/dependency-check/bin/dependency-check.sh --src . --format ALL --project --out $reportDir
+          /usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project --out $reportDir
 
           ls -l $reportDir
 
