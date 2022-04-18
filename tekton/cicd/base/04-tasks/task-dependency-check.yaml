@@ -49,9 +49,9 @@ spec:
           fi
 
           workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
-          reportDir=$(workspaces.source.path)/report
+          reportDir=$(workspaces.report.path)
 
-          mkdir -p $reportDir
+          #mkdir -p $reportDir
 
           cd $workDir
 
@@ -63,3 +63,4 @@ spec:
           echo -e "dependency-check done."
   workspaces:
   - name: source
+  - name: report
