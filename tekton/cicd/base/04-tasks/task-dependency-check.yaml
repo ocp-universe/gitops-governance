@@ -55,10 +55,11 @@ spec:
 
           cd $workDir
 
-          echo -e "Generate SBOM without input..."    
+          echo -e "Dependency-check analyzing..."    
           /usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project $(params.PROJECT_NAME) --out $reportDir
 
           ls -l $reportDir
+          cat $reportDir/dependency-check-report.csv
 
           echo -e "dependency-check done."
   workspaces:
