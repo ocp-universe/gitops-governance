@@ -52,6 +52,9 @@ spec:
   - name: SONAR_ENABLED
     type: string
     default: "false"
+  - name: DC_ENABLED
+    type: string
+    default: "true"
   - name: SONAR_PROJECT_KEY
     type: string
   - name: SONAR_TOKEN_SECRET_NAME
@@ -105,6 +108,30 @@ spec:
     - name: maven-settings
       workspace: maven-settings
   # ##################
+  # Scan app via Dependency-Check
+  - name: dc-scan
+    params:
+    - name: CONTEXT_DIR
+      value: 'src'
+    - name: CHECK_ENABLED
+      value: "true"
+    - name: PROJECT_NAME
+      value: "quarkus-demo"
+    runAfter:
+    - build-app
+    when:
+      - input: "$(params.DC_ENABLED)"
+        operator: in
+        values: ["true"]
+    taskRef:
+      kind: Task
+      name: dependency-check
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: report
+      workspace: reports
+  # ##################
   # Scan app
   - name: sonarqube-scan
     params:
@@ -115,7 +142,7 @@ spec:
     - name: SONAR_TOKEN_SECRET_NAME
       value: $(params.SONAR_TOKEN_SECRET_NAME)
     runAfter:
-    - build-app
+    - dc-scan
     when:
       - input: "$(params.SONAR_ENABLED)"
         operator: in
@@ -279,5 +306,7 @@ spec:
     name: maven-settings
   - description: This workspace will hold the SonarQube Settings (temp dir).
     name: sonar-settings
+  - description: This workspace will hold various reports.
+    name: reports
   - description: This workspace will used for internal/temp data (not persistent).
     name: temp-workspace
