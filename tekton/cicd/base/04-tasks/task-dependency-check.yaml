@@ -74,9 +74,10 @@ spec:
           echo -e "dc exit code: $last_exit_code"
 
           ls -l $reportDir
-          cat $reportDir/dependency-check-report.csv
+          #cat $reportDir/dependency-check-report.csv
           echo -e "----"
-          cat $reportDir/dependency-check-report.json
+          #cat $reportDir/dependency-check-report.json
+          #cat $reportDir/dependency-check-report.html
           echo -e "----"
 
           if [ ${last_exit_code} == 1 ]; then
