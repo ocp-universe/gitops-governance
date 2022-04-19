@@ -67,7 +67,7 @@ spec:
           cmd="/usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project $(params.PROJECT_NAME) --failOnCVSS 9 --out $reportDir"
           if [[ -f "$(params.SUPPRESSION_FILE)" ]]; then
               echo "...$(params.SUPPRESSION_FILE) exists, enhancing..."
-              cmd+=" --suppression $(params.SUPPRESSION_FILE)"
+              cmd="$cmd --suppression $(params.SUPPRESSION_FILE)"
           fi   
 
           # Dependency-Check, fail with CVSS 9 which is CRITICAL
