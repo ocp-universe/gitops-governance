@@ -37,6 +37,9 @@ spec:
     - name: PROJECT_NAME
       description: Name of the project being scanned.
       default: ""
+    - name: SUPPRESSION_FILE
+      description: The file to suppression XML.
+      default: ""
     - name: DC_IMAGE
       default: docker.io/owasp/dependency-check:7.0.4@sha256:b7372649e16c2d92ef4ed7afff2951e8a6de5e270bf1687b282931a34fff1583
   steps:
@@ -61,14 +64,24 @@ spec:
 
           ./mvnw -version
 
+          cmd=(/usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project $(params.PROJECT_NAME) --failOnCVSS 9 --out $reportDir)
+          if [[ -f "$(params.SUPPRESSION_FILE)" ]]; then
+              echo "...$(params.SUPPRESSION_FILE) exists, enhancing..."
+              cmd+=" --suppression $(params.SUPPRESSION_FILE)"
+          fi   
+
           # Dependency-Check, fail with CVSS 9 which is CRITICAL
-          echo -e "Dependency-check analyzing..."    
-          /usr/share/dependency-check/bin/dependency-check.sh \
-            --scan . \
-            --format ALL \
-            --project $(params.PROJECT_NAME) \
-            --failOnCVSS 9 \
-            --out $reportDir
+          echo -e "Dependency-check analyzing..."  
+          eval $cmd
+          #/usr/share/dependency-check/bin/dependency-check.sh \
+          #  --scan . \
+          #  --format ALL \
+          #  --project $(params.PROJECT_NAME) \
+          #  --failOnCVSS 9 \
+          #  --out $reportDir
+
+          dc.supressions.xml
+
 
           last_exit_code=$?
           echo -e "dc exit code: $last_exit_code"
