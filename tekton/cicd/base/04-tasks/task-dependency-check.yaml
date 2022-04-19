@@ -80,9 +80,6 @@ spec:
           #  --failOnCVSS 9 \
           #  --out $reportDir
 
-          dc.supressions.xml
-
-
           last_exit_code=$?
           echo -e "dc exit code: $last_exit_code"
 
