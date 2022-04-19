@@ -57,9 +57,9 @@ spec:
 
           #mkdir -p $reportDir
 
-          cat $workDir/.mvn/wrapper/maven-wrapper.properties
-
           cd $workDir
+
+          ./mvnw -version
 
           # Dependency-Check, fail with CVSS 9 which is CRITICAL
           echo -e "Dependency-check analyzing..."    
