@@ -2,7 +2,7 @@
 #
 # Enhanced TLS_VERIFY, Env Dockerconfig
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   name: kaniko-v0-5-1
   labels:

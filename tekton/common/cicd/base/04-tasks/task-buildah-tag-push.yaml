@@ -1,7 +1,7 @@
 # Buildah base version v0.22.0
 # Tag and Push, helpful for repush to an other Container Registry
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   annotations:
     tekton.dev/pipelines.minVersion: '0.19'

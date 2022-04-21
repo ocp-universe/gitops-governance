@@ -6,7 +6,7 @@
 # - context dir
 ---
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   name: promote-version
   labels:

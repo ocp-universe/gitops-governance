@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- 02-rolebindings/pipeline-service-account.yaml
+- 02-rolebindings/pipeline-service-role.yaml
+- 02-rolebindings/pipeline-privileged-rolebinding.yaml
+#- 03-secrets/
+- 04-tasks/task-deploy-from-source.yaml
+- 04-tasks/task-maven.yaml
+- 04-tasks/task-kaniko.yaml
+- 04-tasks/task-buildah-privileged.yaml
+- 04-tasks/task-buildah-tag-push.yaml
+- 04-tasks/task-sonarqube-scanner.yaml
+- 04-tasks/task-trivy-scan.yaml
+- 04-tasks/task-trivy-checks.yaml
+- 04-tasks/task-ibm-va.yaml
+- 04-tasks/task-yq.yaml
+- 04-tasks/task-promote-version.yaml
+- 04-tasks/task-bom-cyclonedx.yaml
+- 04-tasks/task-bom-syft.yaml
+- 04-tasks/task-dependency-check.yaml
+#- 05-pipelines/
+#- 06-bindings/
+#- 07-templates/
+#- 08-eventlisteners/
+#- 09-routes/

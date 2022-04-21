@@ -1,7 +1,7 @@
 # Maven Task
 # Task to extract version from pom.xml/maven
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   name: maven-get-project-version
   annotations:

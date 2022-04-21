@@ -6,7 +6,7 @@
 # - remove the git-clone and trivy step
 ---
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   name: ibm-img-scan-va
   annotations:

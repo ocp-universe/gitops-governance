@@ -3,7 +3,7 @@
 # Enhacement
 # - privileged: true. with new default parameter SCC_PRIVILEGED
 apiVersion: tekton.dev/v1beta1
-kind: Task
+kind: ClusterTask
 metadata:
   annotations:
     tekton.dev/pipelines.minVersion: '0.19'
