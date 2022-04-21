@@ -1,2 +1,5 @@
 # Default values for tekton.
 # This is a YAML-formatted file.
+
+tekton:
+  v14: true

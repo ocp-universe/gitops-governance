@@ -3,6 +3,7 @@
 #
 # repo: quarkus-playground
 # template: ci-template-maven
+{{ if not .Values.tekton.v14 }}
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
@@ -43,3 +44,4 @@ spec:
 status:
   configuration:
     generatedName: ""
+{{ end }}
