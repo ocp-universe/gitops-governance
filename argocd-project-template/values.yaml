@@ -58,7 +58,7 @@ config:
         create: true
       tekton:
         repo: https://github.com/ocp-universe/gitops-governance.git
-        branch: main
+        branch: stage-b
         path: 'tekton/helm'
     - name: demo-team3
       enabled: false
