@@ -6,9 +6,9 @@ resources:
 #- 01-namespaces/cicd-environment.yaml
 - 02-rolebindings/internal-registry-cicd-binding.yaml
 - 02-rolebindings/pipeline-service-account.yaml
-- 02-rolebindings/pipeline-service-role.yaml
-- 02-rolebindings/pipeline-service-rolebinding.yaml
-- 02-rolebindings/pipeline-privileged-rolebinding.yaml
+#- 02-rolebindings/pipeline-service-role.yaml
+#- 02-rolebindings/pipeline-service-rolebinding.yaml
+#- 02-rolebindings/pipeline-privileged-rolebinding.yaml
 #- 03-secrets/
 - 04-tasks/task-deploy-from-source.yaml
 - 04-tasks/task-maven.yaml
