@@ -1,0 +1,90 @@
+# Task: Trivy - Vulnerability Scanner
+# Source: https://github.com/IBM/ibm-garage-tekton-tasks/blob/main/tasks/3-img-scan-trivy.yaml
+# v0.0.0
+#
+# Enhancements:
+# - remove the git-clone step
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: config-checks-trivy
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: Security
+    description: Checks filesystem and configuration using Trivy.
+    app.openshift.io/description: Checks filesystem and configuration using Trivy.
+    app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
+    app.openshift.io/vcs-ref: main
+spec:
+  description: >-
+    Uses Trivy to scans and checks filesystems and Infrastructure-as-Code (IaC) files for vulnerabilities and misconfigurations.
+  params:
+    - name: CONTEXT_DIR
+      default: "."
+      type: string
+    - name: CHECK_FILESYSTEM
+      default: "false"
+    - name: CHECK_IAC
+      default: "false"
+    - name: TRIVY_IMAGE
+      #default: quay.io/ibmgaragecloud/aquasec-trivy
+      default: docker.io/aquasec/trivy:0.26.0@sha256:9199a32e4e9184eee3868f6774f30abf41e811696d894acee24f4fd3d794e829
+  workspaces:
+  - name: source
+  steps:    
+    - name: check-fs
+      image: $(params.TRIVY_IMAGE)
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+      script: |
+          #!/bin/sh
+          set -e
+
+          PERFORM_CHECK="$(params.CHECK_FILESYSTEM)"
+          if [[ "${PERFORM_CHECK}" == "false" ]] || [[ -z "${PERFORM_CHECK}" ]]; then
+            echo "User selected to skip filesystem check. Skipping Trivy scan."
+            exit 0
+          fi
+
+          PATH_TO_IMAGE="/var/oci/image"
+
+          echo -e "Trivy Filesystem Scan working directory..."
+          trivy fs --security-checks vuln,config .
+
+          my_exit_code=$?
+          echo "Scan exit code :--- $my_exit_code"
+          if [ ${my_exit_code} == 1 ]; then
+              echo "Trivy scanning completed. CRITICAL Vulnerabilities found."
+              exit 1
+          else
+            echo "Trivy scanning completed. CRITICAL vulnerabilities not found."
+          fi
+    - name: check-iac
+      image: $(params.TRIVY_IMAGE)
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+      script: |
+          #!/bin/sh
+          set -e
+
+          PERFORM_CHECK="$(params.CHECK_IAC)"
+          if [[ "${PERFORM_CHECK}" == "false" ]] || [[ -z "${PERFORM_CHECK}" ]]; then
+            echo "User selected to skip IaC check. Skipping Trivy scan."
+            exit 0
+          fi
+
+          PATH_TO_IMAGE="/var/oci/image"
+
+          echo -e "Trivy IaC Scan working directory..."
+          trivy config .
+
+          my_exit_code=$?
+          echo "Scan exit code :--- $my_exit_code"
+          if [ ${my_exit_code} == 1 ]; then
+              echo "Trivy scanning completed. CRITICAL Vulnerabilities found."
+              exit 1
+          else
+            echo "Trivy scanning completed. CRITICAL vulnerabilities not found."
+          fi
+    

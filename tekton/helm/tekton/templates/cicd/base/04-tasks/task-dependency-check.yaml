@@ -1,0 +1,103 @@
+# Task: Dependency-Check
+# Source: https://github.com/jeremylong/DependencyCheck
+# v0.0.0
+#
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: dependency-check
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: Security
+    description: "Dependency check for OWASP Top 10 2021 entry: A06:2021 – Vulnerable and Outdated Components."
+    app.openshift.io/description: Dependency check to analyse files for vulnerable and outdated components.
+    app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
+    app.openshift.io/vcs-ref: main  
+spec:
+  description: >-
+    Dependency check for OWASP Top 10 2021 entry: A06:2021 – Vulnerable and Outdated Components.
+
+    Dependency check to analyse files for vulnerable and outdated components.
+    Details about OWASP: https://owasp.org/Top10/
+    Details about rating: https://www.first.org/cvss/specification-document#Qualitative-Severity-Rating-Scale
+
+    Resulting artifacts
+    * Dependency check reports in HTML, JSON, XML, CSV, SARIF
+  params:
+    - name: CONTEXT_DIR
+      description: Context directory in the workspace
+      default: "."
+      type: string
+    - name: CHECK_ENABLED
+      description: Flag indicating that a dependency check should be performed
+      default: "false"
+    - name: PROJECT_NAME
+      description: Name of the project being scanned.
+      default: ""
+    - name: SUPPRESSION_FILE
+      description: The file to suppression XML.
+      default: ""
+    - name: DC_IMAGE
+      default: docker.io/owasp/dependency-check:7.0.4@sha256:b7372649e16c2d92ef4ed7afff2951e8a6de5e270bf1687b282931a34fff1583
+  steps:
+    - name: check
+      image: $(params.DC_IMAGE)
+      workingDir: $(workspaces.source.path)
+      script: |
+          #!/bin/sh
+
+          PERFORM_ACT="$(params.CHECK_ENABLED)"
+          if [[ "${PERFORM_ACT}" == "false" ]] || [[ -z "${PERFORM_ACT}" ]]; then
+            echo "User selected to skip dependency-check. Skipping dc."
+            exit 0
+          fi
+
+          workDir=$(workspaces.source.path)/$(params.CONTEXT_DIR)
+          reportDir=$(workspaces.report.path)
+
+          #mkdir -p $reportDir
+
+          cd $workDir
+
+          ./mvnw -version
+
+          cmd="/usr/share/dependency-check/bin/dependency-check.sh --scan . --format ALL --project $(params.PROJECT_NAME) --failOnCVSS 9 --out $reportDir"
+          if [[ -f "$(params.SUPPRESSION_FILE)" ]]; then
+              echo "...$(params.SUPPRESSION_FILE) exists, enhancing..."
+              cmd="$cmd --suppression $(params.SUPPRESSION_FILE)"
+          fi   
+
+          # Dependency-Check, fail with CVSS 9 which is CRITICAL
+          echo -e "Dependency-check analyzing..."  
+          eval $cmd
+          #/usr/share/dependency-check/bin/dependency-check.sh \
+          #  --scan . \
+          #  --format ALL \
+          #  --project $(params.PROJECT_NAME) \
+          #  --failOnCVSS 9 \
+          #  --out $reportDir
+
+          last_exit_code=$?
+          echo -e "dc exit code: $last_exit_code"
+
+          ls -l $reportDir
+          #cat $reportDir/dependency-check-report.csv
+          echo -e "----"
+          #cat $reportDir/dependency-check-report.json
+          cat $reportDir/dependency-check-report.html
+          echo -e "----"
+
+          if [ ${last_exit_code} == 1 ]; then
+              echo -e "dependency-check analysis completed. CRITICAL Vulnerabilities found."
+              
+              exit 1
+          else
+            echo -e "dependency-check analysis completed. CRITICAL vulnerabilities not found."
+          fi
+
+  workspaces:
+  - name: source
+  - name: report

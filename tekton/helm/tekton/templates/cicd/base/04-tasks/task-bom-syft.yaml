@@ -1,0 +1,55 @@
+# Task: cyclonedx - SBOM
+# Source: https://cyclonedx.org/
+# v0.0.0
+#
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: sbom-syft
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: Security
+    description: Generate and analyse Software Bill of Material and vulnerability scanner.
+    app.openshift.io/description: Generate and analyse Software Bill of Material.
+    app.openshift.io/vcs-uri: https://github.com/haf-tech/tbd
+    app.openshift.io/vcs-ref: main
+spec:
+  description: >-
+    Generating a Software Bill of Materials from container images and filesystems.
+
+    A vulnerability scanner for container images and filesystems.
+    Easily install the binary to try it out. 
+    Works with Syft, the powerful SBOM (software bill of materials) tool for container images and filesystems.
+  params:
+    - name: CONTEXT_DIR
+      description: Context directory in the workspace
+      default: "."
+      type: string
+    - name: SYFT_ARGS
+      description: The Arguments to be passed to Syft command.
+      type: array
+    - name: SYFT_IMAGE
+      default: docker.io/anchore/syft:v0.44.1@sha256:0d3f03c041edc1c9a25cd182ac40d4c88d055acf220c79b81082ce39ce82f56f
+      description: Syft image to be used
+    - name: GRYPE_ARGS
+      description: The Arguments to be passed to Grype command.
+      type: array
+    - name: GRYPE_IMAGE
+      default: docker.io/anchore/grype:v0.35.0@sha256:6ddbb74d5d4d9927c55028eb7c2f2ed172c4558c945f11e74ecdbf9a1d553db7
+      description: Grype image to be used
+  steps:
+    - name: syft
+      image: $(params.SYFT_IMAGE)
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+      args:
+        - "$(params.SYFT_ARGS)"
+    - name: grype
+      image: $(params.GRYPE_IMAGE)
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+      args:
+        - "$(params.GRYPE_ARGS)"
+  workspaces:
+  - name: source

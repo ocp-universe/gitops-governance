@@ -44,10 +44,10 @@ config:
         branch: stage-b
         path: 'tekton/cicd/overlays'
     - name: demo-team2
-      enabled: false
+      enabled: true
       managedNamespace: demo-team2-cicd
       repo: https://github.com/haf-tech/quarkus-playground-config.git
-      branch: test-promotion
+      branch: main
       path: 'argocd'
       helmValueFile: values.yaml
       configJson: config2.json
@@ -59,7 +59,7 @@ config:
       tekton:
         repo: https://github.com/ocp-universe/gitops-governance.git
         branch: main
-        path: 'tekton/cicd/overlays'
+        path: 'tekton/helm'
     - name: demo-team3
       enabled: false
       managedNamespace: demo-team3-cicd
