@@ -6,10 +6,10 @@ metadata:
   generateName: taskrun-trivy-
 spec:
   taskRef:
-    name: ibm-img-scan-trivy
+    name: img-scan-trivy
   params:
     - name: image-url
-      value: image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground:latest
+      value: image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground
     - name: scan-image
       value: "true"
   

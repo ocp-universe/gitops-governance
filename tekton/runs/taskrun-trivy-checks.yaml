@@ -1,0 +1,21 @@
+# TaskRun: sbom-cyclonedx
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-trivy-checks-
+spec:
+  taskRef:
+    name: config-checks-trivy
+  params:
+    - name: CONTEXT_DIR
+      value: 'src'
+    - name: CHECK_FILESYSTEM
+      value: "true"
+    - name: CHECK_IAC
+      value: "true"
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: pipeline-repo-rwm-pvc
+  

@@ -38,7 +38,7 @@ spec:
 #        - "latest"
     - name: MAVEN_GOALS
       #value: "package -Dmaven.test.skip=true"
-      value: ["-Dmaven.test.skip=false", "-ntp", "package"]
+      value: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]
     - name: COMMIT_SHA
       value: "1233"
     - name: GIT_REF
@@ -79,6 +79,8 @@ spec:
   - name: sonar-settings
     emptyDir: {}
   - name: temp-workspace
+    emptyDir: {}
+  - name: reports
     emptyDir: {}
   - name: shared-data
     persistentVolumeClaim:

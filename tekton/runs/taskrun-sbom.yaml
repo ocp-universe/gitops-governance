@@ -1,0 +1,23 @@
+# TaskRun: sbom-cyclonedx
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-sbom-
+spec:
+  taskRef:
+    name: sbom-cyclonedx
+  params:
+    - name: CONTEXT_DIR
+      value: 'src'
+    - name: GENERATE_BOM
+      value: "true"
+    - name: ANALYSE_BOM
+      value: "true"
+    - name: VALIDATE_BOM
+      value: "false"
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: pipeline-repo-rwm-pvc
+  

@@ -1,0 +1,18 @@
+# TaskRun: sbom-cyclonedx
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-mvn-
+spec:
+  taskRef:
+    name: maven-v0-2-1
+  params:
+    - name: GOALS
+      value: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "package"]
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: pipeline-repo-rwm-pvc
+  - name: maven-settings
+    emptyDir: {}

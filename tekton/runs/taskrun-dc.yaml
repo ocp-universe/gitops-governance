@@ -1,0 +1,25 @@
+# TaskRun: sbom-cyclonedx
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-dependency-check-
+spec:
+  taskRef:
+    name: dependency-check
+  params:
+    - name: CONTEXT_DIR
+      value: 'src'
+    - name: CHECK_ENABLED
+      value: "true"
+    - name: PROJECT_NAME
+      value: "quarkus-demo"
+    - name: SUPPRESSION_FILE
+      value: "dc.suppressions.xml"
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: pipeline-repo-rwm-pvc
+  - name: report
+    emptyDir: {}
+  
