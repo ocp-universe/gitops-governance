@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: pipelines-privileged-role-binding
+  name: pipelines-privileged-{{ .Release.Namespace }}-rb
   annotations:
     argocd.argoproj.io/sync-wave: "-80"
 roleRef:
@@ -11,4 +11,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: pipeline
-  namespace: default
+  namespace: {{ .Release.Namespace }}
