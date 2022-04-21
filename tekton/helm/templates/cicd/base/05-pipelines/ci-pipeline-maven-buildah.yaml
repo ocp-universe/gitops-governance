@@ -100,7 +100,7 @@ spec:
     runAfter:
     - clone-source
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: maven-v0-2-1
     workspaces:
     - name: source
@@ -124,7 +124,7 @@ spec:
         operator: in
         values: ["true"]
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: dependency-check
     workspaces:
     - name: source
@@ -148,7 +148,7 @@ spec:
         operator: in
         values: ["true"]
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: sonarqube-scanner
     workspaces:
     - name: source
@@ -168,7 +168,7 @@ spec:
     runAfter:
     - build-app
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: config-checks-trivy
     workspaces:
     - name: source
@@ -192,7 +192,7 @@ spec:
     runAfter:
     - check-config
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: buildah-v0-22-0-privileged
     workspaces:
     - name: source
@@ -210,7 +210,7 @@ spec:
     runAfter:
     - build-image
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: img-scan-trivy
   # ##################
   # SBOM
@@ -229,7 +229,7 @@ spec:
     runAfter:
     - img-scan-trivy
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: sbom-cyclonedx
     workspaces:
     - name: source
@@ -251,7 +251,7 @@ spec:
         operator: in
         values: ["true"]
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: buildah-tag-push
   # ##################
   # Verify CR VA results
@@ -268,7 +268,7 @@ spec:
         operator: in
         values: ["true"]
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: ibm-img-scan-va
   # ##################
   # Promote version and push back to git
@@ -294,7 +294,7 @@ spec:
         operator: in
         values: ["true", "yes"]
     taskRef:
-      kind: Task
+      kind: ClusterTask
       name: promote-version
     workspaces:
     - name: source
