@@ -3,3 +3,14 @@
 
 tekton:
   v14: true
+
+project:
+  name: demo-name
+  git: 
+    code: 
+      repo: http://github.com/example.git
+      branch: main
+    config: 
+      repo: http://github.com/example-config.git
+      branch: main
+  

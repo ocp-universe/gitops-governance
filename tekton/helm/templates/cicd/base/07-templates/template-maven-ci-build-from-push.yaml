@@ -44,6 +44,12 @@ spec:
         value: $(tt.params.fullname)
       - name: GIT_REPO
         value: $(tt.params.common.git.repo.url)
+      - name: GIT_CONFIG_REPO
+        #value: "https://github.com/haf-tech/quarkus-playground-config"
+        #value: "git@github.com:haf-tech/quarkus-playground-config.git"
+        value: {{ .Values.project.git.config.repo | quote}}
+      - name: GIT_CONFIG_REF
+        value: {{ .Values.project.git.config.branch | quote}}
       - name: TLSVERIFY
         value: $(tt.params.tlsVerify)
       - name: BUILD_EXTRA_ARGS
@@ -76,14 +82,9 @@ spec:
       - name: SONAR_ENABLED
         value: "true"
       - name: SONAR_PROJECT_KEY
-        value: "quarkus-demo"
+        value: {{ .Values.project.name | quote}}
       - name: SONAR_TOKEN_SECRET_NAME
         value: "sonarqube-token-secret"
-      - name: GIT_CONFIG_REPO
-        #value: "https://github.com/haf-tech/quarkus-playground-config"
-        value: "git@github.com:haf-tech/quarkus-playground-config.git"
-      - name: GIT_CONFIG_REF
-        value: "test-promotion"
       - name: REMOTE_CR_PUSH_ENABLED
         value: "true"
       pipelineRef:
