@@ -65,7 +65,7 @@ spec:
   - name: REMOTE_CR_PUSH_ENABLED
     type: string
     description: If tag and push to a remote CR is wanted or not
-    default: "true"
+    default: "false"
   - name: VERIFY_CR_VA_ENABLED
     type: string
     description: If verifying va result in remote CR is wanted or not
