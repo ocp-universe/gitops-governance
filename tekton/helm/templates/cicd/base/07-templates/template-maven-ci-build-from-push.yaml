@@ -42,6 +42,8 @@ spec:
       name: ci-app-$(uid)
     spec:
       params:
+      - name: APP_NAME
+        value: $(tt.params.repoName)
       - name: REPO
         value: $(tt.params.fullname)
       - name: GIT_REPO

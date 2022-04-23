@@ -13,6 +13,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "-50"
 spec:
   params:
+  - name: APP_NAME
+    type: string
+    description: Name of the project/application
   - name: REPO
     type: string
   - name: COMMIT_SHA
@@ -116,7 +119,9 @@ spec:
     - name: CHECK_ENABLED
       value: "true"
     - name: PROJECT_NAME
-      value: "quarkus-demo"
+      value: $(params.APP_NAME)
+    - name: SUPPRESSION_FILE
+      value: "dc.suppressions.xml"
     runAfter:
     - build-app
     when:
