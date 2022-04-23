@@ -42,6 +42,8 @@ spec:
               key: ref
             - expression: 'body.ref.split(''/'')[2]'
               key: imgTag
+            - expression: 'body.repository.name'
+              key: repoName
             #- expression: 'string({{ .Values.project.managedNamespace }})'
             #  key: ns
       ref:

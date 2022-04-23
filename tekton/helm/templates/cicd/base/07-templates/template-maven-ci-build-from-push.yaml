@@ -45,8 +45,6 @@ spec:
       - name: GIT_REPO
         value: $(tt.params.common.git.repo.url)
       - name: GIT_CONFIG_REPO
-        #value: "https://github.com/haf-tech/quarkus-playground-config"
-        #value: "git@github.com:haf-tech/quarkus-playground-config.git"
         value: {{ .Values.project.git.config.repo | quote}}
       - name: GIT_CONFIG_REF
         value: {{ .Values.project.git.config.branch | quote}}
@@ -60,15 +58,12 @@ spec:
         value: $(tt.params.imageRepo)
       - name: IMAGE_VERSION
         value: $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
-#      - name: APP_IMAGE_BASE
-#        value: $(tt.params.imageRepo)
-#      - name: APP_IMAGE_TAGS
-#        value: 
-#         - $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
-#         - $(tt.params.imageTag)
+        # ToBeOptimized
+      - name: IMAGE_REMOTE_CR
+        value: "de.icr.io/$(tt.params.repoName)/$(tt.params.repoName):latest"
       - name: MAVEN_GOALS
         #value: "package -Dmaven.test.skip=true"
-        value: ["-Dmaven.test.skip=false", "-ntp", "package"]
+        value: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]
       - name: COMMIT_SHA
         value: $(tt.params.io.openshift.build.commit.id)
       - name: GIT_REF
@@ -80,7 +75,7 @@ spec:
       - name: COMMIT_MESSAGE
         value: $(tt.params.io.openshift.build.commit.message)
       - name: SONAR_ENABLED
-        value: "true"
+        value: "false"
       - name: SONAR_PROJECT_KEY
         value: {{ .Values.project.name | quote}}
       - name: SONAR_TOKEN_SECRET_NAME
@@ -104,6 +99,8 @@ spec:
       - name: sonar-settings
         emptyDir: {}
       - name: temp-workspace
+        emptyDir: {}
+      - name: reports
         emptyDir: {}
       - name: shared-data
         persistentVolumeClaim:

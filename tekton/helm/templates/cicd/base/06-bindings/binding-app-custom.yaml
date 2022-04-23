@@ -18,4 +18,6 @@ spec:
     value: "false"
   - name: dockerFile
     value: "./src/main/docker/Dockerfile.jvm"
+  - name: repoName
+    value: $(extension.repoName)
 status: {}
