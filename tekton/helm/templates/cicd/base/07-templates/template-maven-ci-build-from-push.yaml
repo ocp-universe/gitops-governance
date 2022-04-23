@@ -34,6 +34,9 @@ spec:
   - description: Custom Dockerfile.
     name: dockerFile
     default: "./src/main/docker/Dockerfile.jvm"
+  - name: pipeline.cr.push.enabled
+    description: Pipeline config, indicate if a push to a remote Container Registry is wanted or not
+    default: "false"
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -85,9 +88,9 @@ spec:
       - name: SONAR_TOKEN_SECRET_NAME
         value: "sonarqube-token-secret"
       - name: REMOTE_CR_PUSH_ENABLED
-        value: "true"
+        value: $(tt.params.pipeline.cr.push.enabled)
       pipelineRef:
-        name: ci-pipeline-maven-buildah
+        name: ci-pipeline-general
       serviceAccountName: pipeline
       taskRunSpecs:
       - pipelineTaskName: promote-version
