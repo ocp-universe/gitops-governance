@@ -299,7 +299,7 @@ spec:
     when:
       - input: "$(params.PROMOTE_VERSION_ENABLED)"
         operator: in
-        values: ["true", "yes"]
+        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: promote-version
