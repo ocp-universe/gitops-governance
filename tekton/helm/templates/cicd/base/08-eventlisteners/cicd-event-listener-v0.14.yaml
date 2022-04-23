@@ -42,8 +42,8 @@ spec:
               key: ref
             - expression: 'body.ref.split(''/'')[2]'
               key: imgTag
-            - expression: 'string({{ .Values.project.managedNamespace }})'
-              key: ns
+            #- expression: 'string({{ .Values.project.managedNamespace }})'
+            #  key: ns
       ref:
         kind: ClusterInterceptor
         name: cel

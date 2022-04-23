@@ -8,8 +8,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "-40"
 spec:
   params:
+  - name: targetNamespace
+    value: {{ .Values.project.managedNamespace }}
   - name: imageRepo
-    value: image-registry.openshift-image-registry.svc:5000/$(extensions.ns)/quarkus-playground
+    value: image-registry.openshift-image-registry.svc:5000/{{ .Values.project.managedNamespace }}/quarkus-playground
   - name: imageTag
     value: $(extensions.imgTag)
   - name: tlsVerify
