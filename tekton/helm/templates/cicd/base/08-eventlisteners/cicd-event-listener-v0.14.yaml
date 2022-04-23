@@ -42,7 +42,7 @@ spec:
               key: ref
             - expression: 'body.ref.split(''/'')[2]'
               key: imgTag
-            - expression: '{{ .Values.project.managedNamespace }}'
+            - expression: 'string({{ .Values.project.managedNamespace }})'
               key: ns
       ref:
         kind: ClusterInterceptor
