@@ -1,6 +1,7 @@
 # ArgoCD Application: Managing Tekton pipeline
 {{- if .Values.config.tekton.enabled }}
 {{- range .Values.config.projects }}
+{{ $currentProject := . }}
 {{ $mangedNamespace := .managedNamespace }}
 {{- if .enabled }}
 ---
@@ -14,9 +15,12 @@ metadata:
 spec:
   project: "default"
   source:
-    repoURL: '{{ .tekton.repo }}'
-    targetRevision: '{{ .tekton.branch }}'
-    path: '{{ .tekton.path }}'    
+    repoURL: '{{ .git.tekton.repo }}'
+    targetRevision: '{{ .git.tekton.branch }}'
+    path: '{{ .git.tekton.path }}'  
+    helm:
+      valules: |
+        project: {{ $currentProject | toYaml | nindent 10 }}        
   destination:
     server: https://kubernetes.default.svc
     namespace: '{{ $mangedNamespace }}'

@@ -98,6 +98,8 @@ rules:
 {{ $projectName := .name }}
 {{- range .namespaces }}
 ---
+# ArgoCD service account, from the cicd namespace of the project
+# assign in all team namespaces this role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
@@ -113,7 +115,7 @@ subjects:
   namespace: {{ $managedNamespace }} 
 ---
 # ArgoCD specific sa for this project.
-# assign in all team namespace the roles
+# assign in all team namespace this roles
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:

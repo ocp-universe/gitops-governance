@@ -35,14 +35,14 @@ spec:
         - name: filter
           value: >-
             (header.match('X-GitHub-Event', 'push') &&
-            body.repository.full_name == 'haf-tech/quarkus-playground')
+            body.repository.full_name == '{{ .Values.project.git.code.fullName }}')
         - name: overlays
           value:
             - expression: 'body.ref.split(''/'')[2]'
               key: ref
             - expression: 'body.ref.split(''/'')[2]'
               key: imgTag
-            - expression: demo-quarkus-cicd
+            - expression: {{ .Values.project.managedNamespace }}
               key: ns
       ref:
         kind: ClusterInterceptor

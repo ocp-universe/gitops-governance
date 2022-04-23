@@ -5,7 +5,7 @@
 {{- if .Values.config.appset.enabled }}
 {{- range .Values.config.projects }}
 {{- if .enabled }}
-{{- if .configJson }}
+{{- if .git.config.configJson }}
 {{ $mangedNamespace := .managedNamespace }}
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -16,10 +16,10 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: {{ .repo }}
-      revision: '{{ .branch }}'
+      repoURL: {{ .git.config.repo }}
+      revision: '{{ .git.config.branch }}'
       files:
-      - path: '{{ .path }}/{{ .configJson }}'
+      - path: '{{ .git.config.path }}/{{ .git.config.configJson }}'
   template:
     metadata:
       name: '{{`{{name}}`}}'

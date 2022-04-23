@@ -6,11 +6,18 @@ tekton:
 
 project:
   name: demo-name
+  managedNamespace: demo-cicd
   git: 
     code: 
       repo: http://github.com/example.git
       branch: main
+      fullName: 'org/repo-name'
     config: 
       repo: http://github.com/example-config.git
       branch: main
-  
+      helmValueFile: values.yaml
+      configJson: config.json
+    tekton:
+      repo: https://github.com/ocp-universe/gitops-governance.git
+      branch: stage-b
+      path: 'tekton/cicd/overlays'

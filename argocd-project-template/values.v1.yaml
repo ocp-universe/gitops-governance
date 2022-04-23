@@ -1,0 +1,76 @@
+# ArgoCD Configuration
+
+config:
+  names:
+    base: 'gov-demo'
+  bootstrap:
+    argocdNamespace: openshift-gitops
+    valueFile: values.yaml
+    serviceaccounts: 
+    - argocd-argocd-application-controller
+    - openshift-gitops-argocd-application-controller
+    - demo-quarkus-app-argocd-application-controller
+  argocdNamespace: demo-quarkus-cicd
+  # ApplicationSet: consider to enable it in ArgoCD "applicationset: {}"
+  appset:
+    enabled: true
+  tekton:
+    enabled: true
+  dex:
+    enabled: true
+  projects: 
+    - name: demo-quarkus-app
+      enabled: true
+      managedNamespace: demo-quarkus-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: main
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: config.json
+      namespaces:
+      - namespace: demo-quarkus-cicd
+        create: true
+      - namespace: demo-quarkus-test
+        create: true
+      - namespace: demo-quarkus-dev
+        create: true
+      - namespace: demo-quarkus-prod
+        create: true
+      tekton:
+        repo: https://github.com/ocp-universe/gitops-governance.git
+        branch: stage-b
+        path: 'tekton/cicd/overlays'
+    - name: demo-team2
+      enabled: true
+      managedNamespace: demo-team2-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: main
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: config2.json
+      namespaces:
+      - namespace: demo-team2-cicd
+        create: true
+      - namespace: demo-team2-test
+        create: true
+      tekton:
+        repo: https://github.com/ocp-universe/gitops-governance.git
+        branch: stage-b
+        path: 'tekton/helm'
+    - name: demo-team3
+      enabled: false
+      managedNamespace: demo-team3-cicd
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
+      branch: test-promotion
+      path: 'argocd'
+      helmValueFile: values.yaml
+      configJson: config3.json
+      namespaces:
+      - namespace: demo-team3-cicd
+        create: true
+      - namespace: demo-team3-test
+        create: true
+      tekton:
+        repo: https://github.com/ocp-universe/gitops-governance.git
+        branch: main
+        path: 'tekton/cicd/overlays'
