@@ -67,16 +67,26 @@ image:static/gitops-overview-all.png[]
 This chapters list all the available features in this setup
 
 * uses ArgoCD for the cluster configuration reconciliation 
-* manages all cluster capabilities in a JSON file which is the base for `ApplicationSet`
-* creates for any team/project an own `ArgoCD` and `Project` instance
+* manages all cluster capabilities in a JSON file which is the base for a `ApplicationSet`
+* creates for any team/project an own `ArgoCD` and `Project` instance and allows the possibility to manage resources and namespaces outside the default `ArgoCD` instance in `openshift-gitops`
 * bound git repo of the team to the ArgoCD Project instance for more/better multi-tenant restriction
-* define policies which limit the access to the ArgoCD resources
+* define ArgoCD policies which limit the access to the ArgoCD resources
 * define OpenShift Groups which can be used to link users to ArgoCD policy groups
 * creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
 * configures ArgoCD to exclude `PipelineRun` and `TaskRun`, this allows to manually execute/run such runs (for testing)
 * Optimize ArgoCD and enable only selective synchronization (out-of-sync) instead always all resources
 * enable Prometheus monitoring for the ArgoCD resources
+* provides Tekton configuration and cluster-wide ``Task``s and ``ClusterRole``s 
+* provide project-specific `Pipeline`, `TriggerTemplate`, `TriggerBinding` definitions
+* expose ArgoCD and Tekton metrics
 
+=== Metrics
+
+Prometheus metrics are enabled where possible. This allows e.g. to get details about the Tekton executions, durations etc based on the exposed link:https://tekton.dev/docs/pipelines/metrics/[Tekton metrics]. Result is e.g. for the metric `tekton_pipelines_controller_cloudevent_count`
+
+image:static/metrics_tekton_ocp.png[]
+
+image:static/metrics_tekton_prometheus.png[]
 
 == Usage
 
@@ -93,6 +103,26 @@ Rest only via modification of the manifest files in the directory. E.g.
 * add a new capability to the cluster (e.g. HashiCorp Vault instance) => link:governance/cluster-configs.json[]
 * Enhance/Fix Tekton pipeline definitions => link:tekton[]
 * Set NetworkPolicies for all projects, but transparent from the dev teams => link:argocd-project-template[]
+
+
+== Open Points
+
+still known open points
+
+* Provide Git secrets/authentication for private repository
+** link:https://tekton.dev/vault/pipelines-v0.14.3/auth/#exposing-credentials[Tekon docu] for expected `Secrets`
+** link `Secret` to `ServiceAccount`
+* For OpenShift and very restricted configurations additional `privileged` permissions needed
+** `oc adm policy add-scc-to-user privileged system:serviceaccount:demo-quarkus-cicd:pipeline` or extend `ClusterRoleBinding` `system:openshift:scc:privileged`
+* Create credentials for external CR push referenced in task `buildah-tag-push`
+** `Secret` currently named `external-cr-push-secret` contains API key
+* Create SonarQube token for the sonar-scanner
+** Token in SonarQube
+** Store token in a `Secret` `oc create secret generic sonarqube-token-secret --from-literal=token=96683f6d8ccxxxxxxx`
+* `TektonConfig` adjustments like `schedule` to prune resource objects, by default is this not configured
+* GitHub Webhook registration
+** Retrieve created `Route` from the `cicd` namespace of the app and register it in GitHub for the repo as 
+
 
 
 == Summary
