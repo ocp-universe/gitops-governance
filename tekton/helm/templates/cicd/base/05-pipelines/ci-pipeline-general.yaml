@@ -290,6 +290,7 @@ spec:
     runAfter:
     - verify-va
     - sonarqube-scan
+    - img-scan-trivy
     when:
       - input: "$(params.PROMOTE_VERSION_ENABLED)"
         operator: in
