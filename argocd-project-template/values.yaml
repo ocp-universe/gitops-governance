@@ -73,8 +73,6 @@ config:
           branch: stage-b
           path: 'tekton/helm'
     - name: demo-app2
-      # name is the base for various resources (ArgoCD, ArgoCD Project, App/Appset)
-      
       # Indicate if project is active and resources should be created and managed or not
       enabled: true
       openShift:
@@ -115,7 +113,7 @@ config:
           # JSON holding the configuration to create the deployment ArgoCD Application
           # main attributes are repo holding the deployment manifest files, stage to dir/branch relation, target namespace
           # Usually managed by the App Dev Team itself
-          configJson: config.json
+          configJson: config2.json
         # The Tekton configuration, holding project specific resources, 
         # like Pipeline and TriggerTemplate definition
         # Usually managed centrally / Platform Team
@@ -125,6 +123,8 @@ config:
           path: 'tekton/helm'
     # Template/Documentation of the possible properties
     - name: name-of-project
+      # name is the base for various resources (ArgoCD, ArgoCD Project, App/Appset)
+
       # Indicate if project is active and resources should be created and managed or not
       enabled: false
       openShift:
