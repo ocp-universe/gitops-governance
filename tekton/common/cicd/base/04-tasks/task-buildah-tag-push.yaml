@@ -64,6 +64,10 @@ spec:
       description: Extra parameters passed for the push command when pushing images.
       name: PUSH_EXTRA_ARGS
       type: string
+    - name: TAG_PUSH_ENABLED
+      default: 'false'
+      description: Indicates if tag-push is wanted or not.
+      type: string
   results:
     - description: Digest of the image just built.
       name: IMAGE_DIGEST
@@ -72,6 +76,13 @@ spec:
       name: tag
       resources: {}
       script: |
+        #!/bin/sh
+
+        PERFORM_ACTION="$(params.TAG_PUSH_ENABLED)"
+        if [[ "${PERFORM_ACTION}" == "false" ]] || [[ -z "${PERFORM_ACTION}" ]]; then
+          echo "User selected to skip task/step. Skipping."
+          exit 0
+        fi
 
         echo "ImageDigest "
         echo $(params.IMAGE_OLD_DIGEST)
@@ -93,7 +104,14 @@ spec:
       name: push
       resources: {}
       script: |
+        #!/bin/sh
 
+        PERFORM_ACTION="$(params.TAG_PUSH_ENABLED)"
+        if [[ "${PERFORM_ACTION}" == "false" ]] || [[ -z "${PERFORM_ACTION}" ]]; then
+          echo "User selected to skip task/step. Skipping."
+          exit 0
+        fi
+        
         imageUrl=$(params.IMAGE_NEW)
 
         containerRegistryServer=$(echo $imageUrl | cut -d/ -f1)

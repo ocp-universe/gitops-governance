@@ -49,6 +49,9 @@ spec:
     - name: CONTEXT_DIR
       description: Context dir, default src
       default: "src"
+    - name: SCAN_ENABLED
+      description: Indicates if a scan is wanted or not.
+      default: "true"
   steps:
     - name: sonar-properties-create
       image: registry.access.redhat.com/ubi8/ubi-minimal:8.2
@@ -76,6 +79,12 @@ spec:
             sed -ir "s|^[#]*\s*${thekey}=.*|$thekey=$newvalue|" $filename
           fi
         }
+
+        PERFORM_ACTION="$(params.SCAN_ENABLED)"
+        if [[ "${PERFORM_ACTION}" == "false" ]] || [[ -z "${PERFORM_ACTION}" ]]; then
+          echo "User selected to skip task/step. Skipping."
+          exit 0
+        fi
 
         sonarToken=${SONAR_TOKEN}
         if [[ -n "$(params.SONAR_TOKEN)" ]]; then

@@ -124,10 +124,12 @@ spec:
       value: "dc.suppressions.xml"
     runAfter:
     - build-app
-    when:
-      - input: "$(params.DC_ENABLED)"
-        operator: in
-        values: ["true"]
+    # Before Pipeline v0.27 includes task skipping also dependent tasks
+    # Workaround: check directly in the tasks, with side-effect to spawn a pod
+#    when:
+#      - input: "$(params.DC_ENABLED)"
+#        operator: in
+#        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: dependency-check
@@ -146,12 +148,16 @@ spec:
       value: $(params.SONAR_PROJECT_KEY)
     - name: SONAR_TOKEN_SECRET_NAME
       value: $(params.SONAR_TOKEN_SECRET_NAME)
+    - name: SCAN_ENABLED
+      value: $(params.SONAR_ENABLED)
     runAfter:
     - dc-scan
-    when:
-      - input: "$(params.SONAR_ENABLED)"
-        operator: in
-        values: ["true"]
+    # Before Pipeline v0.27 includes task skipping also dependent tasks
+    # Workaround: check directly in the tasks, with side-effect to spawn a pod
+#    when:
+#      - input: "$(params.SONAR_ENABLED)"
+#        operator: in
+#        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: sonarqube-scanner
@@ -249,12 +255,16 @@ spec:
       value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: IMAGE_NEW
       value: $(params.IMAGE_REMOTE_CR)
+    - name: TAG_PUSH_ENABLED
+      value: $(params.REMOTE_CR_PUSH_ENABLED)
     runAfter:
     - sbom
-    when:
-      - input: "$(params.REMOTE_CR_PUSH_ENABLED)"
-        operator: in
-        values: ["true"]
+    # Before Pipeline v0.27 includes task skipping also dependent tasks
+    # Workaround: check directly in the tasks, with side-effect to spawn a pod
+#    when:
+#      - input: "$(params.REMOTE_CR_PUSH_ENABLED)"
+#        operator: in
+#        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: buildah-tag-push
@@ -268,10 +278,12 @@ spec:
       value: $(params.VERIFY_CR_VA_ENABLED)    
     runAfter:
     - tag-push
-    when:
-      - input: "$(params.VERIFY_CR_VA_ENABLED)"
-        operator: in
-        values: ["true"]
+    # Before Pipeline v0.27 includes task skipping also dependent tasks
+    # Workaround: check directly in the tasks, with side-effect to spawn a pod
+#    when:
+#      - input: "$(params.VERIFY_CR_VA_ENABLED)"
+#        operator: in
+#        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: ibm-img-scan-va
