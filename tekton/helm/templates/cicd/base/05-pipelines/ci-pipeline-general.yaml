@@ -72,7 +72,7 @@ spec:
   - name: VERIFY_CR_VA_ENABLED
     type: string
     description: If verifying va result in remote CR is wanted or not
-    default: "true"
+    default: "false"
   - name: PROMOTE_VERSION_ENABLED
     type: string
     description: If promoting version back to git is wanted
