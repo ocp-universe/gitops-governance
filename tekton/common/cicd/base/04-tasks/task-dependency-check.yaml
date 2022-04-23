@@ -41,7 +41,8 @@ spec:
       description: The file to suppression XML.
       default: ""
     - name: DC_IMAGE
-      default: docker.io/owasp/dependency-check:7.0.4@sha256:b7372649e16c2d92ef4ed7afff2951e8a6de5e270bf1687b282931a34fff1583
+      #default: docker.io/owasp/dependency-check:7.0.4@sha256:b7372649e16c2d92ef4ed7afff2951e8a6de5e270bf1687b282931a34fff1583
+      default: docker.io/owasp/dependency-check:7.1.0@sha256:0d6a0e564ffff31c182b39fd7ac13cf241d6809a4e777b9d419217839a4f314a
   steps:
     - name: check
       image: $(params.DC_IMAGE)
