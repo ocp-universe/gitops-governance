@@ -72,6 +72,56 @@ config:
           repo: https://github.com/ocp-universe/gitops-governance.git
           branch: stage-b
           path: 'tekton/helm'
+    - name: demo-app2
+      # Indicate if project is active and resources should be created and managed or not
+      enabled: true
+      openShift:
+        # Create groups in OpenShift, which could be used for ArgoCD RBAC
+        # default is false
+        group2argo: false
+      # Namespace of the project specific ArgoCD resources (ArgoCD, ArgoCD Project)
+      # used also as managed-by reference
+      managedNamespace: demo-app2-cicd
+      # Relevant namespaces
+      # - will be created if true
+      # - used as ArgoCD Project destination limitation
+      namespaces:
+      - namespace: demo-app2-cicd
+        create: true
+      - namespace: demo-app2-test
+        create: true
+      git: 
+        # The App source code repository
+        # like source code and every needed to build and package the app
+        # Usually managed bei App Team
+        code: 
+          repo: https://github.com/haf-tech/quarkus-playground.git
+          branch: main
+          path: ''
+          fullName: 'haf-tech/quarkus-playground'
+        # The App configuration, holding project deployment manifest resources, 
+        # like Helm/kustomize definition
+        # Usually managed bei App Team
+        config: 
+          repo: https://github.com/haf-tech/quarkus-playground-config.git
+          branch: main
+          path: 'argocd'
+          # Relevant if ApplicationSet is NOT enabled
+          # DEPRECATED!
+          helmValueFile: values.yaml
+          # Relevant if ApplicationSet is enabled
+          # JSON holding the configuration to create the deployment ArgoCD Application
+          # main attributes are repo holding the deployment manifest files, stage to dir/branch relation, target namespace
+          # Usually managed by the App Dev Team itself
+          configJson: config.json
+        # The Tekton configuration, holding project specific resources, 
+        # like Pipeline and TriggerTemplate definition
+        # Usually managed centrally / Platform Team
+        tekton:
+          repo: https://github.com/ocp-universe/gitops-governance.git
+          branch: stage-b
+          path: 'tekton/helm'
+    # Template/Documentation of the possible properties
     - name: name-of-project
       # Indicate if project is active and resources should be created and managed or not
       enabled: false
