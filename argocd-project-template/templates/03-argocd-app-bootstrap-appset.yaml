@@ -24,7 +24,8 @@ spec:
     metadata:
       name: '{{`{{name}}`}}'
     spec:
-      project: '{{`{{project}}`}}'
+      #project: '{{`{{project}}`}}'
+      project: '{{ .name }}-prj'
       source:
         repoURL: '{{`{{repo}}`}}'
         targetRevision: '{{`{{revision}}`}}'

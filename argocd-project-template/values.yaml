@@ -73,6 +73,8 @@ config:
           branch: stage-b
           path: 'tekton/helm'
     - name: demo-app2
+      # name is the base for various resources (ArgoCD, ArgoCD Project, App/Appset)
+      
       # Indicate if project is active and resources should be created and managed or not
       enabled: true
       openShift:
