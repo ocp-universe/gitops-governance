@@ -25,6 +25,8 @@ spec:
     name: fullname
   - description: The repository to push built images to.
     name: imageRepo
+  - description: The repository name.
+    name: repoName
   - description: Enable image repository TLS certification verification.
     name: tlsVerify
   - description: Extra parameters passed for the push command when pushing images.
