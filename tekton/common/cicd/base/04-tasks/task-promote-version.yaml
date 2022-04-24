@@ -154,6 +154,9 @@ spec:
 
         cat $HOME/.ssh/id_ssh-key-github
 
+        git version
+        
+
         /ko-app/git-init -url="$(params.GIT_URL)" -revision="$(params.GIT_REVISION)" -refspec="$(params.GIT_REF)" -path="$CHECKOUT_DIR" -sslVerify="$(params.GIT_SSL_VERIFY)" -submodules="$(params.GIT_SUBMODULES)" -depth="$(params.GIT_DEPTH)" -sparseCheckoutDirectories="$(params.GIT_SPARSE_CHECKOUT_DIRS)"
 
         cd "$CHECKOUT_DIR"
