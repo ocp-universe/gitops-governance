@@ -145,15 +145,15 @@ spec:
 
         test -z "$(params.HTTP_PROXY)" || export HTTP_PROXY=$(params.HTTP_PROXY)
 
-        test -z "$(params.HTTPS_PROXY)" || export
-        HTTPS_PROXY=$(params.HTTPS_PROXY)
+        test -z "$(params.HTTPS_PROXY)" || export HTTPS_PROXY=$(params.HTTPS_PROXY)
 
         test -z "$(params.NO_PROXY)" || export NO_PROXY=$(params.NO_PROXY)
 
 
         ls -l $HOME/.ssh
+
         cat $HOME/.ssh/id_ssh-key-github
-        
+
         /ko-app/git-init -url="$(params.GIT_URL)" -revision="$(params.GIT_REVISION)" -refspec="$(params.GIT_REF)" -path="$CHECKOUT_DIR" -sslVerify="$(params.GIT_SSL_VERIFY)" -submodules="$(params.GIT_SUBMODULES)" -depth="$(params.GIT_DEPTH)" -sparseCheckoutDirectories="$(params.GIT_SPARSE_CHECKOUT_DIRS)"
 
         cd "$CHECKOUT_DIR"
