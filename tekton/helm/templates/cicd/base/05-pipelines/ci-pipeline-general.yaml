@@ -326,6 +326,17 @@ spec:
     workspaces:
     - name: source
       workspace: temp-workspace
+  finally:
+  - name: clean-up
+    params:
+    - name: CONTEXT_DIR
+      value: '$(params.RUN_ID)'
+    taskRef:
+      kind: ClusterTask
+      name: clean-up
+    workspaces:
+    - name: source
+      workspace: temp-workspace
   workspaces:
   - description: This workspace will receive the cloned git repo.
     name: shared-data

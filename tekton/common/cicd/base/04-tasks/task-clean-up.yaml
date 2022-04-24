@@ -1,0 +1,43 @@
+# Task: SonarQube Scanner
+# Source: https://github.com/tektoncd/catalog/blob/main/task/sonarqube-scanner/0.2/sonarqube-scanner.yaml
+# Tekton Hub: https://hub.tekton.dev/tekton/task/sonarqube-scanner
+# v0.2 - enhanced
+#
+# Enhancements
+# - add sonar.login support as parameter (from a Secret)
+# - add context dir
+# - script optimizations
+---
+apiVersion: tekton.dev/v1beta1
+kind: ClusterTask
+metadata:
+  name: clean-up
+  labels:
+    app.kubernetes.io/version: "0.2.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/categories: Developer Tools
+    tekton.dev/tags: housekeeping
+    tekton.dev/displayName: "Workspace Clean-Up"
+    tekton.dev/platforms: "linux/amd64"
+spec:
+  description: >-
+    Housekeeping and cleans up the workspace
+
+  workspaces:
+    - name: source
+  params:
+    - name: CONTEXT_DIR
+      description: Context dir, default src
+      default: ""
+  steps:
+    - name: rm-contextdir
+      image: registry.access.redhat.com/ubi8/ubi-minimal:8.2
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/usr/bin/env bash
+
+        echo "Clean up $(workspaces.source.path)/$(params.CONTEXT_DIR)..."
+        rm -rf $(workspaces.source.path)/$(params.CONTEXT_DIR)
+
+        echo "Done."

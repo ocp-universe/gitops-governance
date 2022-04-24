@@ -22,6 +22,7 @@ resources:
 - 04-tasks/task-bom-cyclonedx.yaml
 - 04-tasks/task-bom-syft.yaml
 - 04-tasks/task-dependency-check.yaml
+- 04-tasks/task-clean-up.yaml
 #- 05-pipelines/
 #- 06-bindings/
 #- 07-templates/
