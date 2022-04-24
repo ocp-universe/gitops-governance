@@ -214,6 +214,13 @@ spec:
       script: |
         #!/bin/sh
 
+
+        ls -l $HOME/.ssh
+
+        cat $HOME/.ssh/id_ssh-key-github
+
+        git version
+        
         git config --global user.email "gitops@haddouti.com"
         git config --global user.name "GitOps Pipeline"
         
