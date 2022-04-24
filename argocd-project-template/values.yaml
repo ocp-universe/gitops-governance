@@ -37,12 +37,20 @@ config:
         create: true
       - namespace: demo-quarkus-test
         create: true
+        tekton:
+          enabled: true
+          gitEvent: push
+          helmValueFile: 'helm/values.test.yaml'
+          remoteCRNamespace: 'demo-name-test'
+          remoteCRPushEnabled: true
       - namespace: demo-quarkus-dev
         create: true
         tekton:
           enabled: true
           gitEvent: push
           helmValueFile: 'helm/values.dev.yaml'
+          remoteCRNamespace: 'demo-name-dev'
+          remoteCRPushEnabled: false
       - namespace: demo-quarkus-prod
         create: true
       git: 
