@@ -66,19 +66,34 @@ image:static/gitops-overview-all.png[]
 
 This chapters list all the available features in this setup
 
+.ArgoCD related
 * uses ArgoCD for the cluster configuration reconciliation 
 * manages all cluster capabilities in a JSON file which is the base for a `ApplicationSet`
 * creates for any team/project an own `ArgoCD` and `Project` instance and allows the possibility to manage resources and namespaces outside the default `ArgoCD` instance in `openshift-gitops`
 * bound git repo of the team to the ArgoCD Project instance for more/better multi-tenant restriction
 * define ArgoCD policies which limit the access to the ArgoCD resources
 * define OpenShift Groups which can be used to link users to ArgoCD policy groups
-* creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
 * configures ArgoCD to exclude `PipelineRun` and `TaskRun`, this allows to manually execute/run such runs (for testing)
 * Optimize ArgoCD and enable only selective synchronization (out-of-sync) instead always all resources
-* enable Prometheus monitoring for the ArgoCD resources
+* Label all namespaces
+
+.OpenShift/cluster related
+* creates a project structure in OpenShift with predefined namespaces + an additional namespace for all the pipeline resources
+* enable Prometheus monitoring for the ArgoCD resources and expose ArgoCD and Tekton metrics
+
+.Tekton/Pipeline related
 * provides Tekton configuration and cluster-wide ``Task``s and ``ClusterRole``s 
 * provide project-specific `Pipeline`, `TriggerTemplate`, `TriggerBinding` definitions
-* expose ArgoCD and Tekton metrics
+* Provide a base CI/CD Pipeline handling main aspects of a secured supply chain, including 
+** configuration check (vulnerability and infra) with Trivy
+** image scan with Trivy
+** SBOM generation and validation with CycloneDX
+** dependency check with OWASP Dependency-Check
+** image vulnerability check with IBM Cloud Container Registry VA
+** SonarQube scan and push remote to SonarQube instance
+** tag and push to a remoate/additional container registry
+** promote version in a specific Helm value file and push back to git
+* Provide SonarQube token for uploading report with help of `ClusterExternalSecret`
 
 === Metrics
 
@@ -87,6 +102,13 @@ Prometheus metrics are enabled where possible. This allows e.g. to get details a
 image:static/metrics_tekton_ocp.png[]
 
 image:static/metrics_tekton_prometheus.png[]
+
+=== Secrets
+
+For secrets management, have a look at link:https://github.com/ocp-universe/kubernetes-secrets-101[Kubernetes Secrets 101].
+link:https://github.com/external-secrets/external-secrets[`external-secrets`] is primarily used. This expects an `ExternalSecret` CR, holding information about a secret (ID) and how to map this to a `Secret`. The secret (ID) will be used to retrieve the details from a (managed) Secrets Manager (IBM Cloud Secrets Manager, HashiCorp Vault etc).
+
+In this scenario is a `ClusterExternalSecret` responsible to distribute the same SonarQube Token to all cicd namespaces. `ClusterExternalSecret` uses `namespaceSelector` to identify the relevant namespaces and applies an `ExternalSecret` to retrieve the secret.
 
 == Usage
 
@@ -123,7 +145,17 @@ still known open points
 * GitHub Webhook registration
 ** Retrieve created `Route` from the `cicd` namespace of the app and register it in GitHub for the repo as 
 
+== Known Issues
 
+=== Tekton: `when` and dependent Tasks
+
+Before Pipeline v0.27 is the behavior that a not only the current task, but also the dependent tasks will be skipped.
+link:https://github.com/tektoncd/pipeline/pull/4085[TEP-0059: Skipping Strategies] change this behavior from Pipeline v0.27.
+
+The workaround in the version before is to handle the check inside the `Step` definition. Means however this will spawn a container, make the check, and in "worst-case" stop immediately.
+
+.Reference
+* link:https://tekton.dev/docs/pipelines/pipelines/#guarding-a-task-and-its-dependent-tasks[Tekton docu: guarding and dependent tasks]
 
 == Summary
 

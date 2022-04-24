@@ -82,7 +82,7 @@ spec:
       - name: COMMIT_MESSAGE
         value: $(tt.params.io.openshift.build.commit.message)
       - name: SONAR_ENABLED
-        value: "false"
+        value: "true"
       - name: SONAR_PROJECT_KEY
         value: {{ .Values.project.name | quote}}
       - name: SONAR_TOKEN_SECRET_NAME
