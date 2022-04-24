@@ -73,7 +73,7 @@ config:
         config: 
           # Attention: Use git/ssh URL. Use also for promotion and git push with ssh key
           repo: git@github.com:haf-tech/quarkus-playground-config.git
-          branch: test-promotion1
+          branch: test-promotion
           path: 'argocd'
           # Relevant if ApplicationSet is NOT enabled
           # DEPRECATED!
