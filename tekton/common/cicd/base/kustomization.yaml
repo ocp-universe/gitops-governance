@@ -7,6 +7,7 @@ resources:
 - 02-rolebindings/pipeline-privileged-rolebinding.yaml
 - 03-secrets/external-secret-sonarqube.yaml
 - 03-secrets/external-secret-apikey.yaml
+- 03-secrets/external-secret-gh.yaml
 - 04-tasks/task-deploy-from-source.yaml
 - 04-tasks/task-maven.yaml
 - 04-tasks/task-kaniko.yaml
