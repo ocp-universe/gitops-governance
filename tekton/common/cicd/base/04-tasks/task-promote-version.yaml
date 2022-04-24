@@ -218,9 +218,19 @@ spec:
         ls -l $HOME/.ssh
 
         cat $HOME/.ssh/id_ssh-key-github
+        
+        pwd
+
+        cd
+        
+        pwd
+
+        cd -
+
+        pwd
 
         git version
-        
+
         git config --global user.email "gitops@haddouti.com"
         git config --global user.name "GitOps Pipeline"
         
