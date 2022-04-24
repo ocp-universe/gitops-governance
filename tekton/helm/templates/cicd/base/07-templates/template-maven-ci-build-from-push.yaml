@@ -40,6 +40,12 @@ spec:
   - name: pipeline.cr.push.enabled
     description: Pipeline config, indicate if a push to a remote Container Registry is wanted or not
     default: "false"
+  - name: pipeline.cr.push.enabled
+    description: Pipeline config, indicate if a push to a remote Container Registry is wanted or not
+    default: "false"
+  - name: pipeline.cr.namespace
+    description: Pipeline config, Container Registry namespace/repository
+    default: ""
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -70,7 +76,7 @@ spec:
         value: $(tt.params.io.openshift.build.commit.ref)-$(tt.params.io.openshift.build.commit.id)
         # ToBeOptimized
       - name: IMAGE_REMOTE_CR
-        value: "de.icr.io/$(tt.params.repoName)/$(tt.params.repoName):latest"
+        value: "de.icr.io/$(tt.params.pipeline.cr.namespace)/$(tt.params.repoName):$(tt.params.imgTag)"
       - name: MAVEN_GOALS
         #value: "package -Dmaven.test.skip=true"
         value: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]

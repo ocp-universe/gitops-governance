@@ -40,6 +40,7 @@ spec:
         kind: ClusterInterceptor
         name: cel
       params:
+        # refs/heads/, refs/tags/ both push
         - name: filter
           value: >-
             (header.match('X-GitHub-Event', '{{ .tekton.gitEvent }}') &&

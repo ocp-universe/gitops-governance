@@ -1,5 +1,7 @@
+# TriggerBinding: project and namespace specific
 {{- range .Values.project.namespaces }}
 {{- if (.tekton).enabled }}
+---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
@@ -23,6 +25,10 @@ spec:
     value: $(extensions.repoName)
   - name: helmValueFile
     value: '{{ .tekton.helmValueFile }}'
+  - name: pipeline.cr.push.enabled
+    value: '{{ .tekton.remoteCRPushEnabled }}'
+  - name: pipeline.cr.namespace
+    value: '{{ .tekton.remoteCRNamespace }}'
 status: {}
 {{- end }}
 {{- end }}
