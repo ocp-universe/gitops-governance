@@ -19,9 +19,14 @@ spec:
   resources: {}
   serviceAccountName: pipeline
   triggers:
-  - bindings:
+  {{- range .Values.project.namespaces -}}
+  {{- if (.tekton).enabled }}
+  - name: trigger-{{ $.Values.project.name }}-{{ .namespace }}
+    template:
+      ref: ci-template-maven
+    bindings:
     - kind: TriggerBinding
-      ref: binding-app-custom
+      ref: binding-{{ $.Values.project.name }}-{{ .namespace }}
     - kind: TriggerBinding
       ref: binding-github-attributes
     interceptors:
@@ -31,11 +36,14 @@ spec:
     #    secretRef:
     #      secretKey: webhook-secret-key
     #      secretName: webhook-secret-dev-tekton-101
-    - params:
+    - ref:
+        kind: ClusterInterceptor
+        name: cel
+      params:
         - name: filter
           value: >-
-            (header.match('X-GitHub-Event', 'push') &&
-            body.repository.full_name == '{{ .Values.project.git.code.fullName }}')
+            (header.match('X-GitHub-Event', '{{ .tekton.gitEvent }}') &&
+            body.repository.full_name == '{{ $.Values.project.git.code.fullName }}')
         - name: overlays
           value:
             - expression: 'body.ref.split(''/'')[2]'
@@ -44,14 +52,10 @@ spec:
               key: imgTag
             - expression: 'body.repository.name'
               key: repoName
-            #- expression: 'string({{ .Values.project.managedNamespace }})'
+            #- expression: 'string({{ $.Values.project.managedNamespace }})'
             #  key: ns
-      ref:
-        kind: ClusterInterceptor
-        name: cel
-    name: trigger-quarkus-playground-push-any-branch
-    template:
-      ref: ci-template-maven
+    {{- end }}
+    {{- end }}
 status:
   configuration:
     generatedName: ""

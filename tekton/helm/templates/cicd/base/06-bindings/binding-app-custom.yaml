@@ -1,17 +1,18 @@
-# DEPRECATED
+{{- range .Values.project.namespaces }}
+{{- if (.tekton).enabled }}
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   creationTimestamp: null
-  name: binding-app-custom
+  name: binding-{{ $.Values.project.name }}-{{ .namespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "-40"
 spec:
   params:
   - name: targetNamespace
-    value: {{ .Values.project.managedNamespace }}
+    value: {{ $.Values.project.managedNamespace }}
   - name: imageRepo
-    value: image-registry.openshift-image-registry.svc:5000/{{ .Values.project.managedNamespace }}/quarkus-playground
+    value: image-registry.openshift-image-registry.svc:5000/{{ $.Values.project.managedNamespace }}/quarkus-playground
   - name: imageTag
     value: $(extensions.imgTag)
   - name: tlsVerify
@@ -20,4 +21,8 @@ spec:
     value: "./src/main/docker/Dockerfile.jvm"
   - name: repoName
     value: $(extensions.repoName)
+  - name: helmValueFile
+    value: '{{ .tekton.helmValueFile }}'
 status: {}
+{{- end }}
+{{- end }}

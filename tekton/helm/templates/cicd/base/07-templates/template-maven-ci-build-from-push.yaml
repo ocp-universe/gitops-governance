@@ -34,6 +34,9 @@ spec:
   - description: Custom Dockerfile.
     name: dockerFile
     default: "./src/main/docker/Dockerfile.jvm"
+  - name: helmValueFile
+    description: Helm Value File name
+    default: "values.yaml"
   - name: pipeline.cr.push.enabled
     description: Pipeline config, indicate if a push to a remote Container Registry is wanted or not
     default: "false"
@@ -89,6 +92,8 @@ spec:
         value: "sonarqube-token-secret"
       - name: REMOTE_CR_PUSH_ENABLED
         value: $(tt.params.pipeline.cr.push.enabled)
+      - name: HELM_VALUE_FILE
+        value: $(tt.params.helmValueFile)
       pipelineRef:
         name: ci-pipeline-general
       serviceAccountName: pipeline

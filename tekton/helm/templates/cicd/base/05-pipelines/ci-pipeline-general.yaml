@@ -77,6 +77,10 @@ spec:
     type: string
     description: If promoting version back to git is wanted
     default: "true"
+  - name: HELM_VALUE_FILE
+    type: string
+    description: Helm Value File
+    default: "values.yaml"
   tasks:
   # ##################
   # Git clone
@@ -301,7 +305,7 @@ spec:
       value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: FILES
       value: 
-      - 'helm/values.dev.yaml'
+      - '$(params.HELM_VALUE_FILE)'
     - name: EXPRESSION
       value: '.image.digest="$(tasks.build-image.results.IMAGE_DIGEST)"'
     runAfter:

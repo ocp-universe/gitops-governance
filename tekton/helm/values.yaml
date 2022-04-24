@@ -7,17 +7,47 @@ tekton:
 project:
   name: demo-name
   managedNamespace: demo-cicd
+  namespaces:
+  - namespace: demo-quarkus-cicd
+    create: true
+  - namespace: demo-quarkus-test
+    create: true
+  - namespace: demo-quarkus-dev
+    create: true
+    tekton:
+      enabled: true
+      gitEvent: push
+      helmValueFile: 'helm/values.dev.yaml'
+  - namespace: demo-quarkus-prod
+    create: true
   git: 
+    # The App source code repository
+    # like source code and every needed to build and package the app
+    # Usually managed bei App Team
     code: 
-      repo: http://github.com/example.git
+      repo: https://github.com/haf-tech/quarkus-playground.git
       branch: main
-      fullName: 'org/repo-name'
+      path: ''
+      fullName: 'haf-tech/quarkus-playground'
+    # The App configuration, holding project deployment manifest resources, 
+    # like Helm/kustomize definition
+    # Usually managed bei App Team
     config: 
-      repo: http://github.com/example-config.git
+      repo: https://github.com/haf-tech/quarkus-playground-config.git
       branch: main
+      path: 'argocd'
+      # Relevant if ApplicationSet is NOT enabled
+      # DEPRECATED!
       helmValueFile: values.yaml
+      # Relevant if ApplicationSet is enabled
+      # JSON holding the configuration to create the deployment ArgoCD Application
+      # main attributes are repo holding the deployment manifest files, stage to dir/branch relation, target namespace
+      # Usually managed by the App Dev Team itself
       configJson: config.json
+    # The Tekton configuration, holding project specific resources, 
+    # like Pipeline and TriggerTemplate definition
+    # Usually managed centrally / Platform Team
     tekton:
       repo: https://github.com/ocp-universe/gitops-governance.git
       branch: stage-b
-      path: 'tekton/cicd/overlays'
+      path: 'tekton/helm'
