@@ -1,0 +1,34 @@
+# TaskRun: sbom-cyclonedx
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-promotion-
+spec:
+  taskRef:
+    name: promote-version
+    kind: ClusterTask
+  podTemplate:
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 0
+      fsGroup: 0
+  params:
+    - name: GIT_URL
+      value: git@github.com:haf-tech/quarkus-playground-config.git
+    - name: GIT_REVISION
+      value: 'test-promotion'
+    - name: CONTEXT_DIR
+      value: 'src_manifest'
+    - name: IMAGE_DIGEST
+      value: 'abc123'
+    - name: FILES
+      value: 
+      - 'helm/values.dev.yaml'
+    - name: EXPRESSION
+      value: '.image.digest="abc123456789"'
+  workspaces:
+  - name: source
+    emptyDir: {}
+  

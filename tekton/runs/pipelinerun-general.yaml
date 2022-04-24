@@ -14,6 +14,8 @@ metadata:
   generateName: quarkus-build-run-
 spec:
   params:
+    - name: APP_NAME
+      value: "quarkus-play"
     - name: REPO
       value: "quarkus-playground"
     - name: GIT_REPO
@@ -54,9 +56,9 @@ spec:
     - name: SONAR_TOKEN_SECRET_NAME
       value: "sonarqube-token-secret"
     - name: REMOTE_CR_PUSH_ENABLED
-      value: "true"
+      value: "false"
   pipelineRef:
-    name: ci-pipeline-maven-buildah
+    name: ci-pipeline-general
   taskRunSpecs:
     - pipelineTaskName: promote-version
       taskPodTemplate:

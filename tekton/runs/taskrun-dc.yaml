@@ -7,6 +7,7 @@ metadata:
 spec:
   taskRef:
     name: dependency-check
+    kind: ClusterTask
   params:
     - name: CONTEXT_DIR
       value: 'src'
