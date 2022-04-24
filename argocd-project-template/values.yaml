@@ -82,7 +82,7 @@ config:
           # JSON holding the configuration to create the deployment ArgoCD Application
           # main attributes are repo holding the deployment manifest files, stage to dir/branch relation, target namespace
           # Usually managed by the App Dev Team itself
-          configJson: config.json
+          configJson: config4.json
         # The Tekton configuration, holding project specific resources, 
         # like Pipeline and TriggerTemplate definition
         # Usually managed centrally / Platform Team
