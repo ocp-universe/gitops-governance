@@ -71,8 +71,9 @@ config:
         # like Helm/kustomize definition
         # Usually managed bei App Team
         config: 
-          repo: https://github.com/haf-tech/quarkus-playground-config.git
-          branch: main
+          # Attention: Use git/ssh URL. Use also for promotion and git push with ssh key
+          repo: git@github.com:haf-tech/quarkus-playground-config.git
+          branch: test-promotion
           path: 'argocd'
           # Relevant if ApplicationSet is NOT enabled
           # DEPRECATED!
@@ -204,7 +205,8 @@ config:
         # like Helm/kustomize definition
         # Usually managed bei App Team
         config: 
-          repo: http://github.com/example-config.git
+          # Attention: Use git/ssh URL. Use also for promotion and git push with ssh key
+          repo: git@github.com:user-id/example-config.git
           branch: main
           path: 'argocd'
           # Relevant if ApplicationSet is NOT enabled
