@@ -40,7 +40,7 @@ config:
         tekton:
           enabled: true
           gitEvent: push
-          gitRef: 'refs/tags/'
+          gitRef: 'tags'
           helmValueFile: 'helm/values.test.yaml'
           remoteCRNamespace: 'demo-name-test'
           remoteCRPushEnabled: true
@@ -49,7 +49,7 @@ config:
         tekton:
           enabled: true
           gitEvent: push
-          gitRef: 'refs/heads/'
+          gitRef: 'heads'
           helmValueFile: 'helm/values.dev.yaml'
           remoteCRNamespace: 'demo-name-dev'
           remoteCRPushEnabled: false

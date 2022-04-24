@@ -45,7 +45,7 @@ spec:
           value: >-
             (header.match('X-GitHub-Event', '{{ .tekton.gitEvent }}') &&
             body.repository.full_name == '{{ $.Values.project.git.code.fullName }}' &&
-            body.ref.indexOf('{{ .tekton.gitRef }}') > 0)
+            (body.ref.split(''/'')[1] == '{{ .tekton.gitRef }}'))
         - name: overlays
           value:
             - expression: 'body.ref.split(''/'')[2]'
