@@ -87,6 +87,7 @@ rules:
   - operator.external-secrets.io
   resources:
   - externalsecrets
+  - clusterexternalsecrets
   - operatorconfigs
   verbs: ["*"]
 
