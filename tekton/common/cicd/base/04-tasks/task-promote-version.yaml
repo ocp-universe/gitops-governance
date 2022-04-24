@@ -208,8 +208,8 @@ spec:
       securityContext:
         privileged: true
     - name: push-git
-      #image: 'docker.io/alpine/git:v2.26.2'
-      image: $(params.GIT_IMAGE)
+      image: 'docker.io/alpine/git:v2.26.2'
+      #image: $(params.GIT_IMAGE)
       workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
       script: |
         #!/bin/sh
@@ -218,16 +218,6 @@ spec:
         ls -l $HOME/.ssh
 
         cat $HOME/.ssh/id_ssh-key-github
-        
-        pwd
-
-        cd
-        
-        pwd
-
-        cd -
-
-        pwd
 
         git version
 
