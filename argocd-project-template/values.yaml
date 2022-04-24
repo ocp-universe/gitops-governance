@@ -32,6 +32,9 @@ config:
       # Relevant namespaces
       # - will be created if true
       # - used as ArgoCD Project destination limitation
+      # - used for Tekton EventListener/Trigger and Webhook config. 
+      #   Only relevant for the namespaces, which need a direct Webhook trigger
+      #   Default: no Webhook configuration enabled
       namespaces:
       - namespace: demo-quarkus-cicd
         create: true
@@ -155,13 +158,37 @@ config:
       # Relevant namespaces
       # - will be created if true
       # - used as ArgoCD Project destination limitation
+      # - used for Tekton EventListener/Trigger and Webhook config. 
+      #   Only relevant for the namespaces, which need a direct Webhook trigger
       namespaces:
       - namespace: demo-quarkus-cicd
         create: true
       - namespace: demo-quarkus-test
         create: true
+        tekton:
+          enabled: true
+          gitEvent: push
+          gitRef: 'heads'
+          helmValueFile: 'helm/values.test.yaml'
+          remoteCRNamespace: 'demo-name-test'
+          remoteCRPushEnabled: false
       - namespace: demo-quarkus-dev
         create: true
+        # Tekton specific configuration relevant for EventListener/Trigger
+        tekton:
+          # Enable only if Webhook for this namespace is wanted
+          enabled: true
+          # GitHub X-Event header, usually only 'push' (also for tags)
+          gitEvent: push
+          # GitHub Webhook ref: 'refs/tags/xxx' => tags, 'refs/heads/xxx' => heads 
+          gitRef: 'tags'
+          # Helm Value File relevant for this namespace/stage, 
+          # will be also used for version promotion
+          helmValueFile: 'helm/values.test.yaml'
+          # Remote Container Registry namespace/repository
+          remoteCRNamespace: 'demo-name-test'
+          # Indicate if Remote Container Registry push is wanted
+          remoteCRPushEnabled: true
       - namespace: demo-quarkus-prod
         create: true
       git: 
