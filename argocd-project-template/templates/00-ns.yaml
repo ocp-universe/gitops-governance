@@ -1,8 +1,10 @@
 {{- range .Values.config.projects }}
 {{ $mangedNamespace := .managedNamespace }}
+{{ $projectName := .name }}
 {{- if .enabled }}
 {{- range .namespaces }}
 {{- if .create }}
+{{- $compType := ternary "cicd" "env" (eq $mangedNamespace .namespace) }}
 ---
 apiVersion: v1
 kind: Namespace
@@ -13,6 +15,8 @@ metadata:
     kubernetes.io/metadata.name: {{ .namespace }}
     #argocd.argoproj.io/managed-by: {{ $.Values.config.bootstrap.argocdNamespace }}
     argocd.argoproj.io/managed-by: {{ $mangedNamespace }}
+    gitops.gov/component: {{ $compType }}
+    gitops.gov/project: {{ $projectName }}
   name: {{ .namespace }}
 {{- end }}
 {{- end }}
