@@ -121,7 +121,7 @@ spec:
 
 
         CHECKOUT_DIR="$(workspaces.source.path)/$(params.CONTEXT_DIR)"
-
+        ls -l $HOME/.ssh
 
         cleandir() {
           # Delete any existing contents of the repo directory if it exists.
