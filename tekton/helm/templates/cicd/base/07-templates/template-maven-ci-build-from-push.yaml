@@ -54,6 +54,8 @@ spec:
       name: ci-app-$(uid)
     spec:
       params:
+      - name: RUN_ID
+        value: $(uid)
       - name: APP_NAME
         value: $(tt.params.repoName)
       - name: REPO

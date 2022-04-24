@@ -13,6 +13,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "-50"
 spec:
   params:
+  - name: RUN_ID
+    type: string
+    description: Unique (generated) ID
+    default: "0"
   - name: APP_NAME
     type: string
     description: Name of the project/application
@@ -91,7 +95,7 @@ spec:
     - name: revision
       value: $(params.GIT_REF)
     - name: subdirectory
-      value: 'src'
+      value: '$(params.RUN_ID)/src'
     taskRef:
       kind: ClusterTask
       name: git-clone
@@ -119,7 +123,7 @@ spec:
   - name: dc-scan
     params:
     - name: CONTEXT_DIR
-      value: 'src'
+      value: '$(params.RUN_ID)/src'
     - name: CHECK_ENABLED
       value: "true"
     - name: PROJECT_NAME
@@ -175,11 +179,11 @@ spec:
   - name: check-config
     params:
     - name: CHECK_FILESYSTEM
-      value: "true"
+      value: 'true'
     - name: CHECK_IAC
-      value: "true"    
+      value: 'true'    
     - name: CONTEXT_DIR
-      value: "src"    
+      value: '$(params.RUN_ID)/src'
     runAfter:
     - build-app
     taskRef:
@@ -232,7 +236,7 @@ spec:
   - name: sbom
     params:
     - name: CONTEXT_DIR
-      value: 'src'
+      value: '$(params.RUN_ID)/src'
     - name: GENERATE_BOM
       value: "true"
     - name: ANALYSE_BOM
@@ -300,7 +304,7 @@ spec:
     - name: GIT_REVISION
       value: $(params.GIT_CONFIG_REF)
     - name: CONTEXT_DIR
-      value: 'src_manifest'
+      value: '$(params.RUN_ID)/src_manifest'
     - name: IMAGE_DIGEST
       value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: FILES
