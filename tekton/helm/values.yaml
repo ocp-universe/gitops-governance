@@ -20,6 +20,9 @@ project:
       helmValueFile: 'helm/values.test.yaml'
       remoteCRNamespace: 'demo-name-test'
       remoteCRPushEnabled: true
+      toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
+      # Continuous Delivery Toolchain ID configured in IBM Cloud for the App source code repository.
+      # The Toolchain can be empty. It is only needed by the code risk analysis (CRA) task.
   - namespace: demo-quarkus-dev
     create: true
     tekton:
@@ -27,23 +30,24 @@ project:
       gitEvent: push
       gitRef: 'refs/heads/'
       helmValueFile: 'helm/values.dev.yaml'
+      toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
       remoteCRNamespace: 'demo-name-dev'
       remoteCRPushEnabled: false
   - namespace: demo-quarkus-prod
     create: true
-  git: 
+  git:
     # The App source code repository
     # like source code and every needed to build and package the app
     # Usually managed bei App Team
-    code: 
+    code:
       repo: https://github.com/haf-tech/quarkus-playground.git
       branch: main
       path: ''
       fullName: 'haf-tech/quarkus-playground'
-    # The App configuration, holding project deployment manifest resources, 
+    # The App configuration, holding project deployment manifest resources,
     # like Helm/kustomize definition
     # Usually managed bei App Team
-    config: 
+    config:
       repo: https://github.com/haf-tech/quarkus-playground-config.git
       branch: main
       path: 'argocd'
@@ -55,7 +59,7 @@ project:
       # main attributes are repo holding the deployment manifest files, stage to dir/branch relation, target namespace
       # Usually managed by the App Dev Team itself
       configJson: config.json
-    # The Tekton configuration, holding project specific resources, 
+    # The Tekton configuration, holding project specific resources,
     # like Pipeline and TriggerTemplate definition
     # Usually managed centrally / Platform Team
     tekton:

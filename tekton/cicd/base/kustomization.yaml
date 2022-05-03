@@ -24,6 +24,8 @@ resources:
 - 04-tasks/task-bom-cyclonedx.yaml
 - 04-tasks/task-bom-syft.yaml
 - 04-tasks/task-dependency-check.yaml
+- 04-tasks/task-cra.yaml
+- 04-tasks/task-git-clone-custom.yaml
 #- 05-pipelines/ci-pipeline-container.yaml
 #- 05-pipelines/ci-pipeline-maven-kaniko.yaml
 - 05-pipelines/ci-pipeline-maven-buildah.yaml
