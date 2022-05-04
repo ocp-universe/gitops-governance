@@ -7,6 +7,8 @@ tekton:
 project:
   name: demo-name
   managedNamespace: demo-cicd
+  pipeline:
+    toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
   namespaces:
   - namespace: demo-quarkus-cicd
     create: true
@@ -20,7 +22,6 @@ project:
       helmValueFile: 'helm/values.test.yaml'
       remoteCRNamespace: 'demo-name-test'
       remoteCRPushEnabled: true
-      toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
       # Continuous Delivery Toolchain ID configured in IBM Cloud for the App source code repository.
       # The Toolchain can be empty. It is only needed by the code risk analysis (CRA) task.
   - namespace: demo-quarkus-dev
@@ -30,7 +31,6 @@ project:
       gitEvent: push
       gitRef: 'refs/heads/'
       helmValueFile: 'helm/values.dev.yaml'
-      toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
       remoteCRNamespace: 'demo-name-dev'
       remoteCRPushEnabled: false
   - namespace: demo-quarkus-prod

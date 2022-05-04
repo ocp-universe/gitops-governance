@@ -91,7 +91,7 @@ spec:
   - name: TOOLCHAINID
     type: string
     description: Continuous Delivery Pipeline ID used for CRA scanning
-    default: ""
+    default: "4aa35e4b-572c-491b-b8a3-26d353ec82a9"
   tasks:
   # ##################
   # Git clone
