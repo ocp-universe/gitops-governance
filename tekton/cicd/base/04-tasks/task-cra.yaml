@@ -22,6 +22,9 @@ spec:
     Analyze Kubernetes files for compliance with certain rules.
     Any custom scripts or ignorefiles to be used in this task, should be place in a .cra directory
   params:
+    - name: CRA_ENABLED
+      description: Flag indicating if the CRA scan should be done
+      default: "true"
     - name: continuous-delivery-context-secret
       description: Reference name for the secret resource
       default: "external-cr-push-secret"
@@ -53,7 +56,7 @@ spec:
     - name: CONTEXT_DIR_CONFIG
       description: Context directory in the workspace for the deployment manifests
       default: "src_manifest"
-    - name: CRA_ANALYSE_DEPLOYMENT
+    - name: CRA_DEPLOYMENT_ENABLED
       description: Flag indicating if deployment manifests check should be performed
       default: "true"
 
@@ -201,6 +204,12 @@ spec:
             set -x +e
           fi
 
+          PERFORM_CHECK="$(params.CRA_ENABLED)"
+          if [[ "${PERFORM_CHECK}" == "false" ]] || [[ -z "${PERFORM_CHECK}" ]]; then
+            echo "User selected to skip CRA check. Skipping CRA scan."
+            exit 0
+          fi
+
           if [ -n "$ENV_PROPS" ]; then
             echo "${ENV_PROPS}" > ./env-props
             source ./env-props
@@ -334,8 +343,8 @@ spec:
             cat $(params.vulnerability-report)
           fi
 
-          PERFORM_ACT="$(params.CRA_ANALYSE_DEPLOYMENT)"
-          if [ "${PERFORM_ACT}" == "true" ]; then
+          PERFORM_CRA_DEPLOYMENT_ACT="$(params.CRA_DEPLOYMENT_ENABLED)"
+          if [ "${PERFORM_CRA_DEPLOYMENT_ACT}" == "true" ]; then
 
             cd $(params.CONTEXT_DIR_CONFIG)
 

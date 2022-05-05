@@ -88,7 +88,7 @@ spec:
     type: string
     description: Helm Value File
     default: "values.yaml"
-  - name: CRA_ANALYSE_DEPLOYMENT
+  - name: CRA_DEPLOYMENT_ENABLED
     type: string
     description: If analysis of deployment manifests is wanted
     default: "true"
@@ -143,8 +143,10 @@ spec:
     params:
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)'
-    - name: CRA_ANALYSE_DEPLOYMENT
-      value: '$(params.CRA_ANALYSE_DEPLOYMENT)'
+    - name: CRA_ENABLED
+      value: '$(params.CRA_ENABLED)'
+    - name: CRA_DEPLOYMENT_ENABLED
+      value: '$(params.CRA_DEPLOYMENT_ENABLED)'
     - name: TOOLCHAINID
       value: "$(params.TOOLCHAINID)"
     runAfter:
