@@ -37,6 +37,8 @@ spec:
   - name: helmValueFile
     description: Helm Value File name
     default: "values.yaml"
+  - name: toolchainID
+    description: Continuous Delivery Toolchain ID configured in IBM Cloud
   - name: pipeline.cr.push.enabled
     description: Pipeline config, indicate if a push to a remote Container Registry is wanted or not
     default: "false"
@@ -102,17 +104,19 @@ spec:
         value: $(tt.params.pipeline.cr.push.enabled)
       - name: HELM_VALUE_FILE
         value: $(tt.params.helmValueFile)
+      - name: TOOLCHAINID
+        value: $(tt.params.toolchainID)
       pipelineRef:
         name: ci-pipeline-general
       serviceAccountName: pipeline
-      taskRunSpecs:
-      - pipelineTaskName: promote-version
-        taskPodTemplate:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 0
-            fsGroup: 0
+      #taskRunSpecs:
+      #- pipelineTaskName: promote-version
+      #  taskPodTemplate:
+      #    securityContext:
+      #      runAsNonRoot: true
+      #      runAsUser: 1000
+      #      runAsGroup: 0
+      #      fsGroup: 0
       workspaces:
       - name: maven-settings
         emptyDir: {}
