@@ -53,8 +53,8 @@ spec:
     - name: CONTEXT_DIR_CONFIG
       description: Context directory in the workspace for the deployment manifests
       default: "src_manifest"
-    - name: CHECK_ENABLED
-      description: Flag indicating if a deployment check should be performed
+    - name: CRA_ANALYSE_DEPLOYMENT
+      description: Flag indicating if deployment manifests check should be performed
       default: "true"
 
     # Common command params
@@ -334,7 +334,7 @@ spec:
             cat $(params.vulnerability-report)
           fi
 
-          PERFORM_ACT="$(params.CHECK_ENABLED)"
+          PERFORM_ACT="$(params.CRA_ANALYSE_DEPLOYMENT)"
           if [ "${PERFORM_ACT}" == "true" ]; then
 
             cd $(params.CONTEXT_DIR_CONFIG)

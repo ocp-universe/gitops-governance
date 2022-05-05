@@ -88,6 +88,10 @@ spec:
     type: string
     description: Helm Value File
     default: "values.yaml"
+  - name: CRA_ANALYSE_DEPLOYMENT
+    type: string
+    description: If analysis of deployment manifests is wanted
+    default: "true"
   - name: TOOLCHAINID
     type: string
     description: Continuous Delivery Pipeline ID used for CRA scanning
@@ -139,8 +143,8 @@ spec:
     params:
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)'
-    - name: CHECK_ENABLED
-      value: "true"
+    - name: CRA_ANALYSE_DEPLOYMENT
+      value: '$(params.CRA_ANALYSE_DEPLOYMENT)'
     - name: TOOLCHAINID
       value: "$(params.TOOLCHAINID)"
     runAfter:
