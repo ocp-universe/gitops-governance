@@ -3,7 +3,7 @@
 # - build with maven
 # - sonarqube scan
 # - build/package image with buildah
-# 
+#
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -62,6 +62,9 @@ spec:
   - name: DC_ENABLED
     type: string
     default: "true"
+  - name: CRA_ENABLED
+    type: string
+    default: "true"
   - name: SONAR_PROJECT_KEY
     type: string
   - name: SONAR_TOKEN_SECRET_NAME
@@ -85,22 +88,36 @@ spec:
     type: string
     description: Helm Value File
     default: "values.yaml"
+  - name: CRA_DEPLOYMENT_ENABLED
+    type: string
+    description: If analysis of deployment manifests is wanted
+    default: "true"
+  - name: TOOLCHAINID
+    type: string
+    description: Continuous Delivery Pipeline ID used for CRA scanning
+    default: "4aa35e4b-572c-491b-b8a3-26d353ec82a9"
   tasks:
   # ##################
   # Git clone
-  - name: clone-source
+  - name: clone-repos
     params:
-    - name: url
+    - name: GIT_URL
       value: $(params.GIT_REPO)
-    - name: revision
+    - name: GIT_REVISION
       value: $(params.GIT_REF)
-    - name: subdirectory
+    - name: CONTEXT_DIR_SOURCE
       value: '$(params.RUN_ID)/src'
+    - name: GIT_CONFIG_URL
+      value: $(params.GIT_CONFIG_REPO)
+    - name: GIT_CONFIG_REVISION
+      value: $(params.GIT_CONFIG_REF)
+    - name: CONTEXT_DIR_CONFIG
+      value: '$(params.RUN_ID)/src_manifest'
     taskRef:
       kind: ClusterTask
-      name: git-clone
+      name: git-clone-custom
     workspaces:
-    - name: output
+    - name: source
       workspace: shared-data
   # ##################
   # Build app
@@ -108,6 +125,8 @@ spec:
     params:
     - name: GOALS
       value: [$(params.MAVEN_GOALS)]
+    - name: CONTEXT_DIR
+      value: '$(params.RUN_ID)/src'
     runAfter:
     - clone-source
     taskRef:
@@ -118,6 +137,32 @@ spec:
       workspace: shared-data
     - name: maven-settings
       workspace: maven-settings
+  # ##################
+  # CRA scan
+  - name: cra-scan
+    params:
+    - name: CONTEXT_DIR
+      value: '$(params.RUN_ID)'
+    - name: CRA_ENABLED
+      value: '$(params.CRA_ENABLED)'
+    - name: CRA_DEPLOYMENT_ENABLED
+      value: '$(params.CRA_DEPLOYMENT_ENABLED)'
+    - name: TOOLCHAINID
+      value: "$(params.TOOLCHAINID)"
+    runAfter:
+    - build-app
+    # Before Pipeline v0.27 includes task skipping also dependent tasks
+    # Workaround: check directly in the tasks, with side-effect to spawn a pod
+    #when:
+    #  - input: "$(params.CRA_ENABLED)"
+    #    operator: in
+    #    values: ["true"]
+    taskRef:
+      kind: ClusterTask
+      name: cra-check
+    workspaces:
+    - name: source
+      workspace: shared-data
   # ##################
   # Scan app via Dependency-Check
   - name: dc-scan
@@ -131,7 +176,7 @@ spec:
     - name: SUPPRESSION_FILE
       value: "dc.suppressions.xml"
     runAfter:
-    - build-app
+    - cra-scan
     # Before Pipeline v0.27 includes task skipping also dependent tasks
     # Workaround: check directly in the tasks, with side-effect to spawn a pod
 #    when:
@@ -181,7 +226,7 @@ spec:
     - name: CHECK_FILESYSTEM
       value: 'true'
     - name: CHECK_IAC
-      value: 'true'    
+      value: 'true'
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)/src'
     runAfter:
@@ -208,6 +253,8 @@ spec:
       value: $(params.IMAGE)
     - name: IMAGE_VERSION
       value: $(params.IMAGE_VERSION)
+    - name: CONTEXT
+      value: '$(params.RUN_ID)/src'
     runAfter:
     - check-config
     taskRef:
@@ -283,7 +330,7 @@ spec:
     - name: image-url
       value: $(params.IMAGE_REMOTE_CR)
     - name: scan-ibm
-      value: $(params.VERIFY_CR_VA_ENABLED)    
+      value: $(params.VERIFY_CR_VA_ENABLED)
     runAfter:
     - tag-push
     # Before Pipeline v0.27 includes task skipping also dependent tasks
@@ -299,16 +346,12 @@ spec:
   # Promote version and push back to git
   - name: promote-version
     params:
-    - name: GIT_URL
-      value: $(params.GIT_CONFIG_REPO)
     - name: GIT_REVISION
       value: $(params.GIT_CONFIG_REF)
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)/src_manifest'
-    - name: IMAGE_DIGEST
-      value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: FILES
-      value: 
+      value:
       - '$(params.HELM_VALUE_FILE)'
     - name: EXPRESSION
       value: '.image.digest="$(tasks.build-image.results.IMAGE_DIGEST)"'
@@ -325,7 +368,7 @@ spec:
       name: promote-version
     workspaces:
     - name: source
-      workspace: temp-workspace
+      workspace: shared-data
   finally:
   - name: clean-up
     params:
@@ -336,7 +379,7 @@ spec:
       name: clean-up
     workspaces:
     - name: source
-      workspace: temp-workspace
+      workspace: shared-data
   workspaces:
   - description: This workspace will receive the cloned git repo.
     name: shared-data
