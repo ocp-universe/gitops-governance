@@ -93,7 +93,8 @@ This chapters list all the available features in this setup
 ** SonarQube scan and push remote to SonarQube instance
 ** tag and push to a remoate/additional container registry
 ** promote version in a specific Helm value file and push back to git
-* Provide SonarQube token for uploading report with help of `ClusterExternalSecret`
+* Provide various tokens (e.g. for SonarQube, Cloud, GH) to interact and use in the Pipeline tasks, with help of `ClusterExternalSecret`
+* use GitHub SSH Key
 
 === Metrics
 
@@ -134,14 +135,20 @@ still known open points
 * [x] Provide Git secrets/authentication for private repository
 ** [x] link:https://tekton.dev/vault/pipelines-v0.14.3/auth/#exposing-credentials[Tekon docu] for expected `Secrets` => `ClusterExternalSecret` (`eso-global-gh`)
 ** [x] link `Secret` to `ServiceAccount` => Solved with link of `Secret` with `ssh-key-github` in `ServiceAccount` resource definition
+** [x] Pay attention, that the SSH private key has newline at the end other receiving error msg like `invalid format\r\ngit@git...`
+
 * [ ] For OpenShift and very restricted configurations additional `privileged` permissions needed
 ** [ ] `oc adm policy add-scc-to-user privileged system:serviceaccount:demo-quarkus-cicd:pipeline` or extend `ClusterRoleBinding` `system:openshift:scc:privileged`
+
 * [x] Create credentials for external CR push referenced in task `buildah-tag-push`
 ** [x] `Secret` currently named `external-cr-push-secret` contains API key => `ClusterExternalSecret` (`eso-global-apikey`)
+
 * [ ] Create SonarQube token for the sonar-scanner
 ** [ ] Token in SonarQube
 ** [x] Store token in a `Secret` => `ClusterExternalSecret` (`eso-global-sonarqube`)
+
 * [ ] `TektonConfig` adjustments like `schedule` to prune resource objects, by default is this not configured
+
 * [ ] GitHub Webhook registration
 ** [ ] Retrieve created `Route` from the `cicd` namespace of the app and register it in GitHub for the repo as 
 
@@ -156,6 +163,10 @@ The workaround in the version before is to handle the check inside the `Step` de
 
 .Reference
 * link:https://tekton.dev/docs/pipelines/pipelines/#guarding-a-task-and-its-dependent-tasks[Tekton docu: guarding and dependent tasks]
+
+=== GitHub key wrong
+
+Check if the public key changed, see link:https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#ssh-known-host-public-keys[details].
 
 == Summary
 
