@@ -13,18 +13,7 @@ config:
   gitops:
     # install OpenShift GitOps or not
     install: true
-  projects: 
-    # Base configuration for all app teams and projects
-    #- name: gov-projects
-    #  managedNamespace: demo-quarkus-cicd
-    #  repo: https://github.com/ocp-universe/gitops-governance.git
-    #  branch: main
-    #  path: 'argocd-app-template'
-    #  helmValueFile: values.yaml
-    #  argocdNamespace: openshift-gitops
-    #  argocdProject: default
-    #  #configJson: argocd/config.json
-    #  namespaces: []
+  projects:   
     # Common cluster configuration and capabilities for all teams/projects
     - name: gov-cluster-config
       #managedNamespace: demo-quarkus-cicd
@@ -37,3 +26,15 @@ config:
       #configJson: cluster-configs-base.json
       configJson: cluster-configs.json
       namespaces: []
+    # Base configuration for all app teams and projects
+    #- name: gov-projects
+    #  managedNamespace: demo-quarkus-cicd
+    #  repo: https://github.com/ocp-universe/gitops-governance.git
+    #  branch: main
+    #  path: 'argocd-app-template'
+    #  helmValueFile: values.yaml
+    #  argocdNamespace: openshift-gitops
+    #  argocdProject: default
+    #  #configJson: argocd/config.json
+    #  namespaces: []
+    
