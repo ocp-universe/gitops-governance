@@ -7,7 +7,7 @@ config:
     argocdNamespace: openshift-gitops
     valueFile: values.yaml
     serviceaccounts: 
-    - argocd-argocd-application-controller
+    #- argocd-argocd-application-controller
     - openshift-gitops-argocd-application-controller
     - demo-quarkus-app-argocd-application-controller
   argocdNamespace: demo-quarkus-cicd
