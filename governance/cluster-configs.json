@@ -31,9 +31,9 @@
   },
   {
     "name": "ocp-pipelines",
-    "repo": "https://github.com/ocp-universe/gitops-governance.git",
-    "srcPath": "recipes/ocp-pipelines",
-    "revision": "stage-b",
+    "repo": "https://github.com/ocp-universe/ocp-recipes.git",
+    "srcPath": "03-cluster-capabilities/ocp-pipelines",
+    "revision": "main",
     "namespace": "openshift-gitops",
     "project": "default",
     "valueFile": "",
