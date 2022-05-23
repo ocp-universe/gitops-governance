@@ -92,7 +92,7 @@ config:
           path: 'tekton/helm'
     - name: demo-app2
       # Indicate if project is active and resources should be created and managed or not
-      enabled: true
+      enabled: false
       openShift:
         # Create groups in OpenShift, which could be used for ArgoCD RBAC
         # default is false
