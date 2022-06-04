@@ -38,6 +38,7 @@ spec:
   # Limit the git repos which are allowed to use this project  
   sourceRepos:
     - '{{ .git.config.repo }}'
+    - '{{ .git.code.repo }}'
 {{- if eq (.openShift).group2argo true }}
 ---
 # OpenShift Group for OAuth and ArgoCD RBAC
@@ -46,8 +47,13 @@ apiVersion: user.openshift.io/v1
 metadata:
   name: "{{ .name }}-group"
 users:
-  - 'dummy@user.com'
-  - 'user2dummy'
+  {{- if and .openShift.users }}
+  {{- range .openShift.users }}
+  - {{ . }}
+  {{- end }}
+  {{- else }}
+  - "dummy@example.com"
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -89,7 +89,7 @@ config:
         tekton:
           repo: https://github.com/ocp-universe/gitops-governance.git
           branch: stage-b
-          path: 'tekton/helm'
+          path: 'tekton/project-default'
     - name: demo-app2
       # Indicate if project is active and resources should be created and managed or not
       enabled: false
@@ -142,7 +142,7 @@ config:
         tekton:
           repo: https://github.com/ocp-universe/gitops-governance.git
           branch: stage-b
-          path: 'tekton/helm'
+          path: 'tekton/project-default'
     # Template/Documentation of the possible properties
     - name: name-of-project
       # name is the base for various resources (ArgoCD, ArgoCD Project, App/Appset)

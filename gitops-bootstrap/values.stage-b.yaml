@@ -35,5 +35,5 @@ config:
       argocdNamespace: openshift-gitops
       argocdProject: default
       #configJson: cluster-configs-base.json
-      configJson: cluster-configs.json
+      configJson: cluster-configs-stage-b.json
       namespaces: []

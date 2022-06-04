@@ -1,4 +1,4 @@
-# ArgoCD Application: Serves as bootstrap for the custom App
+# ArgoCD Application: Serves as bootstrap for the custom App, for CD
 # Expectation
 # - custom app uses helm
 # - env specific value files
