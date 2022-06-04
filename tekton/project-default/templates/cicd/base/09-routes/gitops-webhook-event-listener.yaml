@@ -9,6 +9,6 @@ spec:
     targetPort: 8000
   to:
     kind: Service
-    name: el-cicd-event-listener-quarkus-playground
+    name: el-cicd-event-listener
     weight: 100
   wildcardPolicy: None

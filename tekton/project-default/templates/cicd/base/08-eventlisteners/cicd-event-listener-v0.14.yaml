@@ -1,7 +1,6 @@
 # EventListener
 # App/Repo specific
 #
-# repo: quarkus-playground
 # template: ci-template-maven
 # 
 # Expects Trigger v0.14.x with adjustments in the format
@@ -10,7 +9,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   creationTimestamp: null
-  name: cicd-event-listener-quarkus-playground
+  name: cicd-event-listener
   annotations:
     argocd.argoproj.io/sync-wave: "-20"
 spec:
