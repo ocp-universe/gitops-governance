@@ -26,7 +26,7 @@ spec:
   - name: helmValueFile
     value: '{{ .tekton.helmValueFile }}'
   - name: toolchainID
-    value: {{ $.Values.project.pipeline.toolchainID }}
+    value: '{{ $.Values.project.pipeline.toolchainID }}'
   - name: pipeline.cr.push.enabled
     value: '{{ .tekton.remoteCRPushEnabled }}'
   - name: pipeline.cr.namespace
