@@ -70,6 +70,8 @@ spec:
   results:
     - description: Digest of the image just built.
       name: IMAGE_DIGEST
+    - description: URL of the image just built.
+      name: IMAGE_URL
   steps:
     - image: $(params.BUILDER_IMAGE)
       name: build
@@ -110,6 +112,7 @@ spec:
       script: |
         #cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST
         cat $(workspaces.source.path)/image-digest | tee $(results.IMAGE_DIGEST.path)
+        echo $(params.IMAGE) | tee $(results.IMAGE_URL.path)
     - image: $(params.BUILDER_IMAGE)
       name: finalizer
       resources: {}
