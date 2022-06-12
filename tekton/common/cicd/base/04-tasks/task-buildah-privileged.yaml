@@ -10,7 +10,6 @@ metadata:
     tekton.dev/tags: image-build
     argocd.argoproj.io/sync-wave: "-60"
   name: buildah-v0-22-0-privileged
-  generation: 1
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/provider-type: redhat
