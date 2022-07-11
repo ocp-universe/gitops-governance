@@ -8,7 +8,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   creationTimestamp: null
-  name: ci-pipeline-general
+  name: ci-pipeline-general-build
   annotations:
     argocd.argoproj.io/sync-wave: "-50"
 spec:
@@ -54,8 +54,13 @@ spec:
     type: string
   - name: GIT_CONFIG_REF
     type: string
-  - name: MAVEN_GOALS
+  - name: BUILD_TOOL
+    type: string
+    description: Specifies which build automation tool should be used
+    default: mvn
+  - name: BUILD_ARGS
     type: array
+    default: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]
   - name: SONAR_ENABLED
     type: string
     default: "false"
@@ -120,15 +125,19 @@ spec:
     - name: source
       workspace: shared-data
   # ##################
-  # Build app
-  - name: build-app
+  # Build app using Maven
+  - name: build-app-mvn
     params:
     - name: GOALS
-      value: [$(params.MAVEN_GOALS)]
+      value: [$(params.BUILD_ARGS)]
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)/src'
     runAfter:
     - clone-repos
+    when:
+      - input: "$(params.BUILD_TOOL)"
+        operator: in
+        values: ["mvn"]
     taskRef:
       kind: ClusterTask
       name: maven-v0-2-1
@@ -137,6 +146,67 @@ spec:
       workspace: shared-data
     - name: maven-settings
       workspace: maven-settings
+  # ##################
+  # Build app using Gradle
+  - name: build-app-gradle
+    params:
+    - name: GRADLE_TASKS
+      value: [$(params.BUILD_ARGS)]
+    - name: CONTEXT_DIR
+      value: '$(params.RUN_ID)/src'
+    runAfter:
+    - clone-repos
+    when:
+      - input: "$(params.BUILD_TOOL)"
+        operator: in
+        values: ["gradle"]
+    taskRef:
+      kind: ClusterTask
+      name: gradle-build
+    workspaces:
+    - name: source
+      workspace: shared-data
+  # ##################
+  # Build app using NPM
+  - name: build-app-npm
+    params:
+    - name: NPM_ARGS
+      value: [$(params.BUILD_ARGS)]
+    - name: CONTEXT_DIR
+      value: '$(params.RUN_ID)/src'
+    runAfter:
+    - clone-repos
+    when:
+      - input: "$(params.BUILD_TOOL)"
+        operator: in
+        values: ["npm"]
+    taskRef:
+      kind: ClusterTask
+      name: npm-build
+    workspaces:
+    - name: source
+      workspace: shared-data
+  # ##################
+  # Build app using .NET
+  - name: build-app-dotnet
+    params:
+    - name: DOTNET_ARGS
+      value: [$(params.BUILD_ARGS)]
+    - name: CONTEXT_DIR
+      #value: '$(params.RUN_ID)/src'
+      value: '$(params.RUN_ID)/src/app'
+    runAfter:
+    - clone-repos
+    when:
+      - input: "$(params.BUILD_TOOL)"
+        operator: in
+        values: ["dotnet"]
+    taskRef:
+      kind: ClusterTask
+      name: dotnet-build
+    workspaces:
+    - name: source
+      workspace: shared-data
   # ##################
   # CRA scan
   - name: cra-scan
@@ -150,13 +220,16 @@ spec:
     - name: TOOLCHAINID
       value: "$(params.TOOLCHAINID)"
     runAfter:
-    - build-app
+    - build-app-mvn
+    - build-app-gradle
+    - build-app-npm
+    - build-app-dotnet
     # Before Pipeline v0.27 includes task skipping also dependent tasks
     # Workaround: check directly in the tasks, with side-effect to spawn a pod
-    #when:
-    #  - input: "$(params.CRA_ENABLED)"
-    #    operator: in
-    #    values: ["true"]
+    when:
+      - input: "$(params.CRA_ENABLED)"
+        operator: in
+        values: ["true"]
     taskRef:
       kind: ClusterTask
       name: cra-check
@@ -230,7 +303,10 @@ spec:
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)/src'
     runAfter:
-    - build-app
+    - build-app-mvn
+    - build-app-gradle
+    - build-app-npm
+    - build-app-dotnet
     taskRef:
       kind: ClusterTask
       name: config-checks-trivy
@@ -346,10 +422,14 @@ spec:
   # Promote version and push back to git
   - name: promote-version
     params:
+    - name: GIT_URL
+      value: $(params.GIT_CONFIG_REPO)
     - name: GIT_REVISION
       value: $(params.GIT_CONFIG_REF)
     - name: CONTEXT_DIR
       value: '$(params.RUN_ID)/src_manifest'
+    - name: IMAGE_DIGEST
+      value: $(tasks.build-image.results.IMAGE_DIGEST)
     - name: FILES
       value:
       - '$(params.HELM_VALUE_FILE)'

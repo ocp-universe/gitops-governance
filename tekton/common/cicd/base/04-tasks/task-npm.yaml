@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1beta1
+kind: ClusterTask
+metadata:
+  name: npm-build
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.17.0"
+    tekton.dev/categories: Build Tools
+    tekton.dev/tags: build-tool
+    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le"
+spec:
+  description: >-
+    This task can be used to run npm goals on a project
+    where package.json is present and has some pre-defined
+    npm scripts.
+
+    Source: https://hub.tekton.dev/tekton/task/npm
+  workspaces:
+    - name: source
+  params:
+    - name: CONTEXT_DIR
+      type: string
+      default: "."
+      description: The path where package.json of the project is defined.
+    - name: NPM_ARGS
+      type: array
+      default: ["version"] # run build
+      description: The npm goals you want to run.
+    - name: IMAGE
+      type: string
+      default: "docker.io/library/node:12-alpine@sha256:dfbebf17bfb014e1e7068e76325a117bccf8679c68aec6a28514184a209c8bae"
+      description: The node image you want to use.
+  steps:
+    - name: npm-run
+      image: $(params.IMAGE)
+      command:
+        - "npm"
+      args:
+        - $(params.NPM_ARGS)
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
