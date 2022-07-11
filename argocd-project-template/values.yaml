@@ -22,11 +22,6 @@ config:
     - name: demo-quarkus-app
       # Indicate if project is active and resources should be created and managed or not
       enabled: true
-      pipeline:
-        toolchainID: '4aa35e4b-572c-491b-b8a3-26d353ec82a9'
-        # Build tool can be: 'mvn', 'gradle', 'npm' or 'dotnet'
-        buildTool: 'mvn'
-        buildArgs: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]
       openShift:
         # Create groups in OpenShift, which could be used for ArgoCD RBAC
         # default is false

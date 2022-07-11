@@ -48,6 +48,12 @@ spec:
   - name: pipeline.cr.namespace
     description: Pipeline config, Container Registry namespace/repository
     default: ""
+  - name: buildTool
+    description: Specifies which build automation tool should be used
+    default: mvn
+  - name: buildArgs
+    description: Specifies which build arguments should the build tool use
+    default: ["-Dmaven.test.skip=false", "-Dquarkus.log.level=ERROR", "-ntp", "clean", "package"]
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun

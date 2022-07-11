@@ -62,7 +62,7 @@ spec:
     - name: CRA_ENABLED
       value: "false"
   pipelineRef:
-    name: ci-pipeline-general-build
+    name: ci-pipeline-general
   taskRunSpecs:
     - pipelineTaskName: promote-version
       taskPodTemplate:
