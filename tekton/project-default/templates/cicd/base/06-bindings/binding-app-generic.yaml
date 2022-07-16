@@ -1,0 +1,40 @@
+# TriggerBinding: project and namespace specific
+{{- range .Values.project.namespaces }}
+{{- if (.tekton).enabled }}
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  creationTimestamp: null
+  name: binding-{{ $.Values.project.name }}-{{ .namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-40"
+spec:
+  params:
+  - name: targetNamespace
+    value: {{ $.Values.project.managedNamespace }}
+  - name: imageRepo
+    value: image-registry.openshift-image-registry.svc:5000/{{ $.Values.project.managedNamespace }}/quarkus-playground
+  - name: imageTag
+    value: $(extensions.imgTag)
+  - name: tlsVerify
+    value: "false"
+  - name: dockerFile
+    value: "./src/main/docker/Dockerfile.jvm"
+  - name: repoName
+    value: $(extensions.repoName)
+  - name: helmValueFile
+    value: '{{ .tekton.helmValueFile }}'
+  - name: buildTool
+    value: '{{ $.Values.project.pipeline.buildTool }}'
+  - name: buildArgs
+    value: '{{ $.Values.project.pipeline.buildArgs }}'
+  - name: toolchainID
+    value: '{{ $.Values.project.pipeline.toolchainID }}'
+  - name: pipeline.cr.push.enabled
+    value: '{{ .tekton.remoteCRPushEnabled }}'
+  - name: pipeline.cr.namespace
+    value: '{{ .tekton.remoteCRNamespace }}'
+status: {}
+{{- end }}
+{{- end }}
