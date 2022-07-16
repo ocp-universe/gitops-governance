@@ -23,6 +23,10 @@ resources:
 - 04-tasks/task-bom-syft.yaml
 - 04-tasks/task-dependency-check.yaml
 - 04-tasks/task-clean-up.yaml
+- 04-tasks/task-npm.yaml
+- 04-tasks/task-gradle.yaml
+- 04-tasks/task-dotnet.yaml
+- 04-tasks/task-git-clone-custom.yaml
 #- 05-pipelines/
 #- 06-bindings/
 #- 07-templates/
