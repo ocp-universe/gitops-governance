@@ -1,0 +1,26 @@
+# Kustomize: Tekton Chains
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openshift-pipelines
+
+resources:
+- tekton-chains.yaml
+
+# See for the possible config parameters
+# https://docs.openshift.com/container-platform/4.10/cicd/pipelines/using-tekton-chains-for-openshift-pipelines-supply-chain-security.html#supported-keys-tekton-chains-configuration_using-tekton-chains-for-openshift-pipelines-supply-chain-security
+configMapGenerator:
+  - name: chains-config
+    namespace: openshift-pipelines
+    behavior: merge
+    literals: 
+    - artifacts.oci.storage=""
+    # Format to store result meta data, "tekton" is deprecated. in-toto will be default
+    - artifacts.taskrun.format="in-tot"
+    # Where to store the result meta data
+    - artifacts.taskrun.storage="tekton,oci"
+    # Enable upload to Transparency Log
+    - transparency.enabled=true
+
+

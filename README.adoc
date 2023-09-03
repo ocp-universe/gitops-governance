@@ -96,6 +96,9 @@ This chapters list all the available features in this setup
 * Provide various tokens (e.g. for SonarQube, Cloud, GH) to interact and use in the Pipeline tasks, with help of `ClusterExternalSecret`
 * use GitHub SSH Key
 
+.Security related
+* Supply Chain Security using Tekton Chains with Sigstore cosign and in-toto attestation
+
 === Metrics
 
 Prometheus metrics are enabled where possible. This allows e.g. to get details about the Tekton executions, durations etc based on the exposed link:https://tekton.dev/docs/pipelines/metrics/[Tekton metrics]. Result is e.g. for the metric `tekton_pipelines_controller_cloudevent_count`
@@ -110,6 +113,271 @@ For secrets management, have a look at link:https://github.com/ocp-universe/kube
 link:https://github.com/external-secrets/external-secrets[`external-secrets`] is primarily used. This expects an `ExternalSecret` CR, holding information about a secret (ID) and how to map this to a `Secret`. The secret (ID) will be used to retrieve the details from a (managed) Secrets Manager (IBM Cloud Secrets Manager, HashiCorp Vault etc).
 
 In this scenario is a `ClusterExternalSecret` responsible to distribute the same SonarQube Token to all cicd namespaces. `ClusterExternalSecret` uses `namespaceSelector` to identify the relevant namespaces and applies an `ExternalSecret` to retrieve the secret.
+
+=== Software Supply Chain Security
+
+Tekton Chains enhance the Tekton / OpenShift Pipeline logic with the following security capabilities
+
+* sign all results using a private key
+
+.Example for a signed TaskRun
+[source,yaml]
+----
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  annotations:
+    pipeline.tekton.dev/release: 6b5710c
+    argocd.argoproj.io/sync-wave: '-50'
+    tekton.dev/tags: git
+    chains.tekton.dev/payload-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0: >-
+      eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjAuM...
+    tekton.dev/categories: Git
+    chains.tekton.dev/cert-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0: ''
+    chains.tekton.dev/signed: 'true'
+    tekton.dev/platforms: 'linux/amd64,linux/s390x,linux/ppc64le,linux/arm64'
+    tekton.dev/pipelines.minVersion: 0.21.0
+    chains.tekton.dev/chain-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0: ''
+    tekton.dev/displayName: git clone
+    chains.tekton.dev/signature-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0: >-
+      eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5pbi10b3RvK2....
+  resourceVersion: '8679691'
+----
+
+Tekton Chains added the following annotations
+
+* `chains.tekton.dev/payload-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0`: Contains the payload with parameters and steps definition
+* `chains.tekton.dev/cert-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0`: empty
+* `chains.tekton.dev/signed`: 'true'
+* `chains.tekton.dev/chain-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0`: empty
+* `chains.tekton.dev/signature-taskrun-34d5ba5a-2f9c-475f-a210-6381cb8c42a0`: Contains again the payload with a signature using the private key
+* `chains.tekton.dev/transparency`: URL to the log in Rekor, e.g. 'https://rekor.sigstore.dev/api/v1/log/entries?logIndex=2632637'
+* `chains.tekton.dev/retries`: Number of retries if was not successful at the first one, e.g. '3'
+
+.`chains.tekton.dev/payload-...`
+[source,json]
+----
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicateType": "https://slsa.dev/provenance/v0.2",
+  "subject": null,
+  "predicate": {
+    "builder": {
+      "id": "https://tekton.dev/chains/v2"
+    },
+    "buildType": "https://tekton.dev/attestations/chains@v2",
+    "invocation": {
+      "configSource": {},
+      "parameters": {
+        "deleteExisting": "true",
+        "depth": "1",
+        "gitInitImage": "registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:55b0686bbd045c9c77820686318f8a5ff2aff06de566b067f408d27a93bf153c",
+        "httpProxy": "[]",
+        "httpsProxy": "[]",
+        "noProxy": "[]",
+        "refspec": "[]",
+        "revision": "[]",
+        "sparseCheckoutDirectories": "[]",
+        "sslVerify": "true",
+        "subdirectory": "[]",
+        "submodules": "true",
+        "url": "{string https://github.com/haf-tech/quarkus-playground []}",
+        "userHome": "/tekton/home",
+        "verbose": "true"
+      }
+    },
+    "buildConfig": {
+      "steps": [
+        {
+          "entryPoint": "#!/usr/bin/env sh\nset -eu\n\nif [ \"${PARAM_VERBOSE}\" = \"true\" ] ; then\n  set -x\nfi\n\nif [ \"${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}\" = \"true\" ] ; then\n  cp \"${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials\" \"${PARAM_USER_HOME}/.git-credentials\"\n  cp \"${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig\" \"${PARAM_USER_HOME}/.gitconfig\"\n  chmod 400 \"${PARAM_USER_HOME}/.git-credentials\"\n  chmod 400 \"${PARAM_USER_HOME}/.gitconfig\"\nfi\n\nif [ \"${WORKSPACE_SSH_DIRECTORY_BOUND}\" = \"true\" ] ; then\n  cp -R \"${WORKSPACE_SSH_DIRECTORY_PATH}\" \"${PARAM_USER_HOME}\"/.ssh\n  chmod 700 \"${PARAM_USER_HOME}\"/.ssh\n  chmod -R 400 \"${PARAM_USER_HOME}\"/.ssh/*\nfi\n\nCHECKOUT_DIR=\"${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}\"\n\ncleandir() {\n  # Delete any existing contents of the repo directory if it exists.\n  #\n  # We don't just \"rm -rf ${CHECKOUT_DIR}\" because ${CHECKOUT_DIR} might be \"/\"\n  # or the root of a mounted volume.\n  if [ -d \"${CHECKOUT_DIR}\" ] ; then\n    # Delete non-hidden files and directories\n    rm -rf \"${CHECKOUT_DIR:?}\"/*\n    # Delete files and directories starting with . but excluding ..\n    rm -rf \"${CHECKOUT_DIR}\"/.[!.]*\n    # Delete files and directories starting with .. plus any other character\n    rm -rf \"${CHECKOUT_DIR}\"/..?*\n  fi\n}\n\nif [ \"${PARAM_DELETE_EXISTING}\" = \"true\" ] ; then\n  cleandir\nfi\n\ntest -z \"${PARAM_HTTP_PROXY}\" || export HTTP_PROXY=\"${PARAM_HTTP_PROXY}\"\ntest -z \"${PARAM_HTTPS_PROXY}\" || export HTTPS_PROXY=\"${PARAM_HTTPS_PROXY}\"\ntest -z \"${PARAM_NO_PROXY}\" || export NO_PROXY=\"${PARAM_NO_PROXY}\"\n\n/ko-app/git-init \\\n  -url=\"${PARAM_URL}\" \\\n  -revision=\"${PARAM_REVISION}\" \\\n  -refspec=\"${PARAM_REFSPEC}\" \\\n  -path=\"${CHECKOUT_DIR}\" \\\n  -sslVerify=\"${PARAM_SSL_VERIFY}\" \\\n  -submodules=\"${PARAM_SUBMODULES}\" \\\n  -depth=\"${PARAM_DEPTH}\" \\\n  -sparseCheckoutDirectories=\"${PARAM_SPARSE_CHECKOUT_DIRECTORIES}\"\ncd \"${CHECKOUT_DIR}\"\nRESULT_SHA=\"$(git rev-parse HEAD)\"\nEXIT_CODE=\"$?\"\nif [ \"${EXIT_CODE}\" != 0 ] ; then\n  exit \"${EXIT_CODE}\"\nfi\nprintf \"%s\" \"${RESULT_SHA}\" > \"$(results.commit.path)\"\nprintf \"%s\" \"${PARAM_URL}\" > \"$(results.url.path)\"\n",
+          "arguments": null,
+          "environment": {
+            "container": "clone",
+            "image": "registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:55b0686bbd045c9c77820686318f8a5ff2aff06de566b067f408d27a93bf153c"
+          },
+          "annotations": null
+        }
+      ]
+    },
+    "metadata": {
+      "buildStartedOn": "2022-06-11T15:12:59Z",
+      "buildFinishedOn": "2022-06-11T15:13:24Z",
+      "completeness": {
+        "parameters": false,
+        "environment": false,
+        "materials": false
+      },
+      "reproducible": false
+    }
+  }
+}
+----
+
+.`chains.tekton.dev/signature-...`
+[source,json]
+----
+{
+  "payloadType": "application/vnd.in-toto+json",
+  "payload": "eyJfdHlwZSI6Imh0dHBz...",
+  "signatures": [
+    {
+      "keyid": "SHA256:nW12Kc+OGfSunjGmePUepQW3uUY1o5FEwXBxCFMy1vg",
+      "sig": "MEUCIDpam/WBJEy6EChe/QHuQ+roH2hZ9KCbdUvBIbNcJI2tAiEA4YpdcpbJs9iYuprCZHdfob98qj3oR0xJd7/EPYP87ds="
+    }
+  ]
+}
+----
+
+----
+
+
+{"level":"info","ts":"2022-06-11T15:37:35.194Z","logger":"watcher","caller":"taskrun/taskrun.go:52","msg":"taskrun demo-quarkus-cicd/quarkus-build-run-7tdzp-clone-source is still running","commit":"e94c32e","knative.dev/controller":"github.com.tektoncd.chains.pkg.reconciler.taskrun.Reconciler","knative.dev/kind":"tekton.dev.TaskRun","knative.dev/traceid":"bb3a900f-ae22-4f7d-a8f9-fbebed79c4ed","knative.dev/key":"demo-quarkus-cicd/quarkus-build-run-7tdzp-clone-source"}
+{"level":"info","ts":"2022-06-11T15:37:35.194Z","logger":"watcher","caller":"controller/controller.go:550","msg":"Reconcile succeeded","commit":"e94c32e","knative.dev/controller":"github.com.tektoncd.chains.pkg.reconciler.taskrun.Reconciler","knative.dev/kind":"tekton.dev.TaskRun","knative.dev/traceid":"bb3a900f-ae22-4f7d-a8f9-fbebed79c4ed","knative.dev/key":"demo-quarkus-cicd/quarkus-build-run-7tdzp-clone-source","duration":0.000276724}
+
+----
+
+Tekton Chains controller recognize all Tekton changes and
+
+.Error message if task run does not produce a container image
+----
+{"level":"error","ts":"2022-06-11T15:44:47.215Z","logger":"watcher","caller":"chains/signing.go:210",
+	"msg":"Did not find anything to attest",
+----
+
+Some tasks do not produce a (new) container image, like git-clone task, in this case the error message will occur.
+
+
+.Payload for image
+[source,yaml]
+----
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-build-
+  annotations:
+    chains.tekton.dev/payload-taskrun-662323cc-751b-42cd-a290-4030eb08b7e3: >-
+      eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjAuMSIsInByZWRpY2F0...
+    pipeline.tekton.dev/release: 6b5710c
+    argocd.argoproj.io/sync-wave: '-60'
+    tekton.dev/tags: image-build
+    chains.tekton.dev/cert-taskrun-662323cc-751b-42cd-a290-4030eb08b7e3: ''
+    chains.tekton.dev/transparency: 'https://rekor.sigstore.dev/api/v1/log/entries?logIndex=2636344'
+    chains.tekton.dev/signed: 'true'
+    chains.tekton.dev/chain-taskrun-662323cc-751b-42cd-a290-4030eb08b7e3: ''
+    tekton.dev/pipelines.minVersion: '0.19'
+    chains.tekton.dev/signature-taskrun-662323cc-751b-42cd-a290-4030eb08b7e3: >-
+      eyJwYXlsb2FkVHlwZSI6ImFwcGx...
+  resourceVersion: '9665278'
+  name: taskrun-build-4l5f4
+  
+----
+
+.Payload for image
+[source,json]
+----
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicateType": "https://slsa.dev/provenance/v0.2",
+  "subject": [
+    {
+      "name": "image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground",
+      "digest": {
+        "sha256": "baff1ab1f14fc436140489c1ac76153c858c7ccb98278ba2da135861ed6eca07"
+      }
+    }
+  ],
+  "predicate": {
+    "builder": {
+      "id": "https://tekton.dev/chains/v2"
+    },
+    "buildType": "https://tekton.dev/attestations/chains@v2",
+    "invocation": {
+      "configSource": {},
+      "parameters": {
+        "BUILDER_IMAGE": "registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13",
+        "BUILD_EXTRA_ARGS": "[]",
+        "CONTEXT": "src",
+        "DOCKERFILE": "./Dockerfile",
+        "FORMAT": "oci",
+        "IMAGE": "{string image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground []}",
+        "IMAGE_VERSION": "latest",
+        "PUSH_EXTRA_ARGS": "[]",
+        "STORAGE_DRIVER": "vfs",
+        "TLSVERIFY": "true"
+      }
+    },
+    "buildConfig": {
+      "steps": [
+        {
+          "entryPoint": "\nimgUrl=$(params.IMAGE):$(params.IMAGE_VERSION)\n\nbuildah --storage-driver=$(params.STORAGE_DRIVER) bud \\\n  $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \\\n  --tls-verify=$(params.TLSVERIFY) --no-cache \\\n  -f $(params.DOCKERFILE) -t $imgUrl $(params.CONTEXT)\n",
+          "arguments": null,
+          "environment": {
+            "container": "build",
+            "image": "registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13"
+          },
+          "annotations": null
+        },
+        {
+          "entryPoint": "imgUrl=$(params.IMAGE):$(params.IMAGE_VERSION)\n\nbuildah --storage-driver=$(params.STORAGE_DRIVER) push \\\n  $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \\\n  --digestfile $(workspaces.source.path)/image-digest $imgUrl \\\n  docker://$imgUrl\n",
+          "arguments": null,
+          "environment": {
+            "container": "push",
+            "image": "registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13"
+          },
+          "annotations": null
+        },
+        {
+          "entryPoint": "#cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST\ncat $(workspaces.source.path)/image-digest | tee $(results.IMAGE_DIGEST.path)\necho $(params.IMAGE) | tee $(results.IMAGE_URL.path)\n",
+          "arguments": null,
+          "environment": {
+            "container": "digest-to-results",
+            "image": "registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13"
+          },
+          "annotations": null
+        },
+        {
+          "entryPoint": "cat $(results.IMAGE_DIGEST.path)\necho -e \"Done.\"\n",
+          "arguments": null,
+          "environment": {
+            "container": "finalizer",
+            "image": "registry.redhat.io/rhel8/buildah@sha256:6a68ece207bc5fd8db2dd5cc2d0b53136236fb5178eb5b71eebe5d07a3c33d13"
+          },
+          "annotations": null
+        }
+      ]
+    },
+    "metadata": {
+      "buildStartedOn": "2022-06-12T09:48:43Z",
+      "buildFinishedOn": "2022-06-12T09:50:16Z",
+      "completeness": {
+        "parameters": false,
+        "environment": false,
+        "materials": false
+      },
+      "reproducible": false
+    }
+  }
+}
+----
+
+Important is, that `IMAGE_DIGEST` and `IMAGE_URL` as results available, see the link:https://tekton.dev/docs/chains/config/#chains-type-hinting[hints] in the docu.
+
+Attestation > Message + Signature
+Message > Statement
+Statement > Subject + Predicate
+Predicate > e.g. SLSA Provenance
+SLSA Provenance > data.Attestation
+data.Attetation > TaskRun payload
+
+* If `transparency.enabled` is enabled, the generated result will be signed and pushed to Rekor. `chains.tekton.dev/transparency` will hold the URL to the log entry.
+* Rekor entry is a SLSA `Provenance` and holds information about
+** who build the artifact
+** with which inputs (`invocation` section which holds also the TaskRun parameters in `parameters`)
+** `buildConfig` holds the info what was executed
+
+.References
+* link:https://github.com/slsa-framework/slsa/blob/main/controls/attestations.md[SLSA: Attestations]
+* link:https://slsa.dev/provenance/v0.2[SLSA: Provenance]
 
 == Usage
 
@@ -143,8 +411,8 @@ still known open points
 * [x] Create credentials for external CR push referenced in task `buildah-tag-push`
 ** [x] `Secret` currently named `external-cr-push-secret` contains API key => `ClusterExternalSecret` (`eso-global-apikey`)
 
-* [ ] Create SonarQube token for the sonar-scanner
-** [ ] Token in SonarQube
+* [x] Create SonarQube token for the sonar-scanner
+** [x] Token in SonarQube => Manual. Create user in SonarQube and generate a token. Store the token in a Secrets Management instance
 ** [x] Store token in a `Secret` => `ClusterExternalSecret` (`eso-global-sonarqube`)
 
 * [ ] `TektonConfig` adjustments like `schedule` to prune resource objects, by default is this not configured
@@ -165,6 +433,11 @@ The workaround in the version before is to handle the check inside the `Step` de
 * link:https://tekton.dev/docs/pipelines/pipelines/#guarding-a-task-and-its-dependent-tasks[Tekton docu: guarding and dependent tasks]
 
 === GitHub key wrong
+
+.Error message
+----
+time="2022-06-05T07:48:57Z" level=error msg="error generating params" error="Error during fetching commitSHA: ssh: handshake failed: knownhosts: key mismatch" generator="&{0xc000ae2660}"
+----
 
 Check if the public key changed, see link:https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#ssh-known-host-public-keys[details].
 

@@ -1,0 +1,33 @@
+# TaskRun: build
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: taskrun-build-
+spec:
+  taskRef:
+    kind: ClusterTask
+    name: buildah-v0-22-0-privileged
+  params:
+    - name: TLSVERIFY
+      value: 'false'
+    - name: BUILD_EXTRA_ARGS
+      value: >-
+        --label=io.openshift.build.commit.author='code@haddouti.com'
+        --label=io.openshift.build.commit.date='2021-09-26T11:04:15+00:00'
+        --label=io.openshift.build.commit.id='1233'
+        --label=io.openshift.build.commit.message='Test PipelineRun'
+        --label=io.openshift.build.commit.ref='main'
+    - name: DOCKERFILE
+      value: ./src/main/docker/Dockerfile.jvm
+    - name: IMAGE
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/demo-quarkus-cicd/quarkus-playground
+    - name: IMAGE_VERSION
+      value: latest
+  workspaces:
+  - name: source
+    persistentVolumeClaim:
+      claimName: pipeline-repo-rwm-pvc
+
+  
